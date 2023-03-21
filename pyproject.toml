@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "travel-messanger"
+version = "0.1.0"
+description = ""
+authors = ["DmiKul, Neverless, 3str-webdev"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "travel_messanger"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
