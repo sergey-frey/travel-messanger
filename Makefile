@@ -15,14 +15,14 @@ ifneq ($(wildcard .env),)
 	endif
 endif
 
+export
+
 .PHONY: install
 install: ## Installations
-	poetry env use python
+	poetry env use python3
 	poetry install
 	poetry run pre-commit install
 
 .PHONY: run-backend
 run-backend: ## Run backend
-	poetry run gunicorn --reload --bind $(HOST):$(BACKEND_PORT) \
-	--worker-class uvicorn.workers.UvicornWorker \
-	--workers $(WORKERS) --log-level $(LEVEL) --chdir cmd/app main:app
+	poetry run uvicorn --app-dir server run:app
