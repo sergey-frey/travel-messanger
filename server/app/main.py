@@ -5,6 +5,8 @@ from db import settings
 from utils.exception_handlers import database_error_handler, database_not_found_handler, http_exception_handler
 from sqlalchemy.exc import DBAPIError, NoResultFound
 from db import database
+from fastapi.staticfiles import StaticFiles
+
 
 def create_app() -> FastAPI:
     app = FastAPI(
@@ -18,12 +20,13 @@ def create_app() -> FastAPI:
     if settings.BACKEND_CORS_ORIGINS:
         app.add_middleware(
             CORSMiddleware,
-            allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+            allow_origins=[str(origin)
+                           for origin in settings.BACKEND_CORS_ORIGINS],
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],
         )
-
+    # app.mount('/client/src/assets/', StaticFiles(directory='/client/src/assets/'), name='assets')
     app.include_router(api_router, prefix=settings.API)
     app.dependency_overrides.setdefault(*database.override_session)
     app.add_exception_handler(DBAPIError, database_error_handler)

@@ -25,4 +25,4 @@ install: ## Installations
 
 .PHONY: run-backend
 run-backend: ## Run backend
-	poetry run uvicorn --app-dir server run:app
+	poetry run uvicorn run:app
