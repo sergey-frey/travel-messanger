@@ -46,8 +46,10 @@ __pypackages__/
 # Celery stuff
 celerybeat-schedule
 celerybeat.pid
-
+server/.env
 # Environments
+.env
+server/.env
 .venv
 venv/
 alembic.ini
@@ -74,4 +76,3 @@ dmypy.json
 
 # VS Code
 .vscode/
-venv

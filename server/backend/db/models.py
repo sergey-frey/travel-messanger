@@ -2,9 +2,9 @@ from datetime import datetime
 import uuid
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID
 from sqlalchemy import (JSON, TIMESTAMP, Boolean, Column, DateTime, ForeignKey, Integer,
-                        String, Table, UUID)
+                        String, Table, UUID, Text)
 from sqlalchemy.orm import relationship, backref
-from utils.base import Base
+from backend.utils.base import Base
 
 role = Table(
     "role",
@@ -31,7 +31,7 @@ posts = Table(
 user_chat = Table(
     'user_chat',
     Base.metadata,
-    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('user_id', UUID, ForeignKey('user.id')),
     Column('chat_id', Integer, ForeignKey('chats.id'))
 )
 
@@ -59,8 +59,9 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     hashed_password: str = Column(String(length=1024), nullable=False)
 
     chats = relationship('Chat', secondary='user_chat', backref='users')
-    posts = relationship("Post", backref="user", lazy="dynamic")
-    photos = relationship("Photo", backref="user", lazy="dynamic")
+    # posts = relationship("posts", backref="user", lazy="dynamic")
+    # photos = relationship("photos", backref="user", lazy="dynamic")
+
     is_active: bool = Column(Boolean, default=True, nullable=False)
     is_superuser: bool = Column(Boolean, default=False, nullable=False)
     is_verified: bool = Column(Boolean, default=False, nullable=False)
@@ -72,6 +73,27 @@ class Message(Base):
     text = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
     chat_id = Column(Integer, ForeignKey('chats.id'))
-    user_id = Column(Integer, ForeignKey('users.id'))
+    user_id = Column(UUID(as_uuid=True), ForeignKey('user.id'))
 
     user = relationship('User', backref=backref('messages', order_by=id))
+
+
+
+class Comment(Base):
+    __tablename__ = 'comment'
+    id = Column(Integer, primary_key=True)
+    text = Column(Text)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow,
+                        onupdate=datetime.utcnow)
+    content_id = Column(Integer, ForeignKey('content.id'))
+    content = relationship('Content', back_populates='comments')
+
+
+class Content(Base):
+    __tablename__ = 'content'
+    id = Column(Integer, primary_key=True)
+    likes = Column(Integer, default=0)
+    dislikes = Column(Integer, default=0)
+    comments = relationship(
+        'Comment', back_populates='content', cascade='all, delete-orphan')

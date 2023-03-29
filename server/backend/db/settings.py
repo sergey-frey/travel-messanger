@@ -23,9 +23,9 @@ class Settings(BaseSettings):
 
     SECRET_KEY = "XXXXXXXXXX"
 
-    NAME: str = "FastAPI Clean API"
+    NAME: str = "Travel messenger API"
     VERSION: str = "1.0"
-    DESCRIPTION: str = "FastAPI Clean REST API"
+    DESCRIPTION: str = "REST API Documentation"
     SECRET_OPENAI_KEY: str = os.environ.get("SECRET_OPENAI")
     SWAGGER_UI_PARAMETERS: Dict[str, Any] = {
         "displayRequestDuration": True,
@@ -69,7 +69,6 @@ class Settings(BaseSettings):
             port=DB_PORT,
             path=f"/{DB_NAME}",
         )
-
 
     class Config(object):
         case_sensitive = True
