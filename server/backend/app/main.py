@@ -38,7 +38,6 @@ def create_app() -> FastAPI:
         )
     # app.mount('/client/src/assets/', StaticFiles(directory='/client/src/assets/'), name='assets')
     app.include_router(api_router, prefix=settings.API)
-    app.dependency_overrides.setdefault(*database.override_session)
     app.add_exception_handler(DBAPIError, database_error_handler)
     app.add_exception_handler(HTTPException, http_exception_handler)
     app.add_exception_handler(NoResultFound, database_not_found_handler)

@@ -20,34 +20,21 @@ async def create_database(url: str) -> None:
     await engine.dispose()
 
 
-def async_session(
-    url: str,
-    *,
-    wrap: Callable[..., Any] | None = None,
-) -> Callable[..., AsyncSessionGenerator] | AsyncContextManager[Any]:
-    engine = create_async_engine(
-        url,
-        pool_pre_ping=True,
-        future=True,
-    )
-    factory = async_sessionmaker(
-        engine,
-        class_=AsyncSession,
-        autoflush=False,
-        expire_on_commit=False,
-    )
+engine = create_async_engine(
+    settings.DATABASE_URI,
+    pool_pre_ping=True,
+    future=True,
+)
+factory = async_sessionmaker(
+    engine,
+    class_=AsyncSession,
+    autoflush=False,
+    expire_on_commit=False,
+)
 
-    async def get_session() -> AsyncSessionGenerator:  # noqa: WPS430, WPS442
-        async with factory() as session:
-            yield session
-
-    return get_session if wrap is None else wrap(get_session)
-
-
-async def get_session() -> AsyncSession:
-    async with async_session() as session:
+async def get_session() -> AsyncGenerator[AsyncSession, None]:  # noqa: WPS430, WPS442
+    async with factory() as session:
         yield session
-        
-override_session = get_session, async_session(settings.DATABASE_URI)
-context_session = async_session(
-    settings.DATABASE_URI, wrap=asynccontextmanager)
+
+override_session = get_session()
+context_session = get_session()

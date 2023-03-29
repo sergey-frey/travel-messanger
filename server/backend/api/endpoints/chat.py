@@ -4,14 +4,15 @@ from fastapi.responses import HTMLResponse
 from fastapi import APIRouter, Depends, WebSocket
 from backend.db.models import Chat, User, Message
 from backend.crud.base import get_chat, get_user
+from backend.db.database import get_session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
 connected_websockets = set()
 
 
 @router.websocket('/ws/{chat_id}/{user_id}')
-# , session: AsyncSession = Depends(async_session)
-async def chat_ws(websocket: WebSocket, chat_id: int, user_id: int):
+async def chat_ws(websocket: WebSocket, chat_id: int, user_id: int, session: AsyncSession = Depends(get_session)):
     # Accept the websocket connection
     await websocket.accept()
 
