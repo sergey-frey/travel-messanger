@@ -21,7 +21,9 @@ router.include_router(
     tags=["auth"],
 )
 router.include_router(
-    fastapi_users.get_auth_router(auth_backend), prefix="/auth/jwt", tags=["auth"]
+    fastapi_users.get_auth_router(auth_backend),
+    prefix="/auth/jwt",
+    tags=["auth"]
 )
 router.include_router(
     fastapi_users.get_register_router(UserRead, UserCreate),
@@ -37,6 +39,7 @@ router.include_router(
     fastapi_users.get_verify_router(UserRead),
     prefix="/auth",
     tags=["auth"],
+    
 )
 router.include_router(
     fastapi_users.get_users_router(UserRead, UserUpdate),

@@ -17,18 +17,7 @@ async def get_user(user_id, db: AsyncSession):
         result = await db.execute(stmt)
         return result.scalars().first()
         
-# Query all chats with their associated messages and users
-async def get_chats(db):
-        stmt = select(Chat).options(selectinload(
-            Chat.messages).selectinload(Message.user))
-        result = await db.execute(stmt)
-        return result.scalars().all()
 
-# Query one chats 
-async def get_chat(chat_id,db):
-        stmt = select(Chat).where(Chat.id == chat_id)
-        result = await db.execute(stmt)
-        return result.scalars().first()
 
 # Query the number of messages in a specific chat
 async def get_message_count(chat_id,db):

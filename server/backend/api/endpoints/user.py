@@ -12,10 +12,10 @@ router = APIRouter()
 
 @router.get("/authenticated-route")
 async def authenticated_route(user: User = Depends(current_active_user)):
-    return {"message": f"Hello {user.email}!"}
+    return {"message": f"Hello {user.username}!"}
 
 
-@router.get("/", tags=["auth"], description="Endpoint for user authentication", response_model=UserRead)
+@router.get("/", description="Endpoint for get user data", response_model=UserRead)
 async def get_user_by_uuid(user_id: UUID, db: AsyncSession = Depends(get_session)) -> UserRead:
     """
     Authenticates a user and returns an access token.
