@@ -1,10 +1,9 @@
-from db import settings
+from backend.db import settings
 from contextlib import asynccontextmanager
 from typing import Any, AsyncContextManager, AsyncGenerator, Callable
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
-from utils.base import Base
+from backend.utils.base import Base
 
-from utils.mocks import get_session
 
 AsyncSessionGenerator = AsyncGenerator[AsyncSession, None]
 
@@ -45,6 +44,10 @@ def async_session(
     return get_session if wrap is None else wrap(get_session)
 
 
+async def get_session() -> AsyncSession:
+    async with async_session() as session:
+        yield session
+        
 override_session = get_session, async_session(settings.DATABASE_URI)
 context_session = async_session(
     settings.DATABASE_URI, wrap=asynccontextmanager)

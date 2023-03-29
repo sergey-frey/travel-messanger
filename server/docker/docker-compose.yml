@@ -1,0 +1,38 @@
+version: '3.9'
+services:
+
+  db:
+    image: postgres:latest
+    container_name: travel_messanger_db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - network
+    ports:
+      - 54320:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  # backend:
+  #   build:
+  #     context: ..
+  #     dockerfile: docker/backend.Dockerfile
+  #   container_name: fastapi_backend
+  #   depends_on:
+  #     - db
+  #     - migration
+  #   env_file:
+  #     - ${ENV_FILE}
+  #   networks:
+  #     - network
+  #   ports:
+  #     - ${HOST_BACKEND_PORT}:${BACKEND_PORT}
+
+networks:
+  network:
+    driver: bridge
+
+volumes:
+  db_data:
