@@ -10,5 +10,5 @@ export interface IUser {
 	chats: string[]; // chat id list
 	posts: string[]; // post id list
 	photos: string[]; // photo id list
-    followers: string[] //folowers id list
+    followers: string[] // followers id list
 }
