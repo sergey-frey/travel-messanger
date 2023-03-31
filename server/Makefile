@@ -1,9 +1,9 @@
 ifneq ($(wildcard docker/.env.example),)
 	ENV_FILE = .env.example
 endif
-ifneq ($(wildcard .env),)
+ifneq ($(wildcard .env.example),)
 	ifeq ($(COMPOSE_PROJECT_NAME),)
-		include .env
+		include .env.example
 	endif
 endif
 ifneq ($(wildcard docker/.env),)

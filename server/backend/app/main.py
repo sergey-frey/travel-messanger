@@ -4,8 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.db import settings
 from backend.utils.exception_handlers import database_error_handler, database_not_found_handler, http_exception_handler
 from sqlalchemy.exc import DBAPIError, NoResultFound
-from backend.db import database
 from fastapi.staticfiles import StaticFiles
+
 
 
 def create_app() -> FastAPI:

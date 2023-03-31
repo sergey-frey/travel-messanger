@@ -4,10 +4,10 @@ from fastapi.responses import HTMLResponse
 from fastapi import APIRouter, Depends, HTTPException, WebSocket
 from sqlalchemy import insert, select
 from backend.db.models import Chat, User, Message
-from backend.crud.base import get_chat, get_user
 from backend.db.database import get_session
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.crud import chat as crud
+from backend.crud import chat
+from backend.crud import base
 
 router = APIRouter()
 connected_websockets = set()
@@ -22,8 +22,8 @@ async def chat_ws(websocket: WebSocket, chat_id: int, user_id: int, session: Asy
     connected_websockets.add(websocket)
 
     # Retrieve the chat and user objects from the database
-    chat = get_chat(chat_id)
-    user = get_user(user_id)
+    chat = chat.get_chat(chat_id)
+    user = base.get_user(user_id)
 
     # Loop to receive and broadcast messages
     while True:
@@ -45,15 +45,16 @@ async def chat_ws(websocket: WebSocket, chat_id: int, user_id: int, session: Asy
 @router.post('/')
 async def create_chat(name: str, session: AsyncSession = Depends(get_session)):
     try:
-        return await crud.create_chat(name, session)
+        return await chat.create_chat(name, session)
     except HTTPException as exception:
         raise HTTPException(
             status_code=503, detail=f"Database error: {exception}")
 
+
 @router.get('/')
 async def get_all_chats(session: AsyncSession = Depends(get_session)):
     try:
-        return await crud.get_chats(session)
+        return await chat.get_chats(session)
     except HTTPException as exception:
         raise HTTPException(
             status_code=503, detail=f"Database error: {exception}")

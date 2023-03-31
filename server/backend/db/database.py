@@ -19,7 +19,6 @@ async def create_database(url: str) -> None:
 
     await engine.dispose()
 
-
 engine = create_async_engine(
     settings.DATABASE_URI,
     pool_pre_ping=True,
