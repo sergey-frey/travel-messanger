@@ -1,3 +1,4 @@
+import { PostModule } from './../../shared/modules/post/post.module';
 import { UserAvatarModule } from './../../shared/modules/user-avatar/user-avatar.module';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -26,7 +27,8 @@ import { OnlineBadgeComponent } from './components/online-badge/online-badge.com
     TuiButtonModule,
     TuiSvgModule,
     TuiBadgeModule,
-    UserAvatarModule
+    UserAvatarModule,
+    PostModule
   ],
   exports: [UserPageComponent]
 })
