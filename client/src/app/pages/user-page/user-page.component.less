@@ -1,0 +1,23 @@
+.user-page__container {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 240px);
+  gap: 30px;
+  // grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+  "actions info info info info"
+  "photos photos photos friends friends";
+}
+.actions {
+  grid-area: actions;
+}
+.info {
+  grid-area: info;
+}
+.photos {
+  grid-area: photos;
+}
+.friends {
+  grid-area: friends;
+}
