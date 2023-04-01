@@ -11,6 +11,8 @@ import { PhotosSectionComponent } from './components/photos-section/photos-secti
 import { UserPageComponent } from './user-page.component';
 import { UserPageSectionComponent } from './components/user-page-section/user-page-section.component';
 import { OnlineBadgeComponent } from './components/online-badge/online-badge.component';
+import { FriendItemComponent } from './components/friend-item/friend-item.component';
+import { ImageItemComponent } from './components/image-item/image-item.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { OnlineBadgeComponent } from './components/online-badge/online-badge.com
     PhotosSectionComponent,
     FriendsSectionComponent,
     UserPageSectionComponent,
-    OnlineBadgeComponent
+    OnlineBadgeComponent,
+    FriendItemComponent,
+    ImageItemComponent
   ],
   imports: [
     CommonModule,
