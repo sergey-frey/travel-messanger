@@ -8,6 +8,7 @@ import {
   TUI_SANITIZER
 } from '@taiga-ui/core';
 import { NgDompurifySanitizer } from '@tinkoff/ng-dompurify';
+import { UserPageModule } from './pages/user-page/user-page.module';
 
 import { StoreModule } from '@ngrx/store';
 import { AppRoutingModule } from './app-routing.module';
@@ -16,6 +17,7 @@ import { AppComponent } from './app.component';
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    UserPageModule,
     BrowserModule,
     AppRoutingModule,
     StoreModule.forRoot({}, {}),
