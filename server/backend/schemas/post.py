@@ -6,14 +6,17 @@ from backend.schemas import ContentBase
 from backend.schemas.comment import Comment
 
 
-
-
 class PostBase(ContentBase):
     title: str
     content: str
     owner: UUID
 
+
 class PostCreate(PostBase):
+    pass
+
+
+class PostUpdate(PostBase):
     pass
 
 

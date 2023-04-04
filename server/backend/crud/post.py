@@ -1,13 +1,11 @@
 from fastapi import Depends, HTTPException
 from sqlalchemy import insert, select
 
-from backend.db.models import Chat
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
-from backend.db.models import Chat, Message
 from server.backend.db.models import Post
+from server.backend.schemas.post import PostUpdate
 
 
 async def _create_post(post, session: AsyncSession):
@@ -19,12 +17,12 @@ async def _create_post(post, session: AsyncSession):
 
 
 async def _read_posts(session: AsyncSession, skip: int = 0, limit: int = 5, ):
-    posts = await session.execute(models.Post.select().offset(skip).limit(limit))
+    posts = await session.execute(Post.select().offset(skip).limit(limit))
     return posts.scalars().all()
 
 
-async def _update_post(post_id: int, post: schemas.PostUpdate, session: AsyncSession):
-    session_post = await session.get(models.Post, post_id)
+async def _update_post(post_id: int, post: PostUpdate, session: AsyncSession):
+    session_post = await session.get(Post, post_id)
     if not session_post:
         raise HTTPException(status_code=404, detail="Post not found")
     session_post.title = post.title
@@ -35,7 +33,7 @@ async def _update_post(post_id: int, post: schemas.PostUpdate, session: AsyncSes
 
 
 async def _delete_post(post_id: int, session: AsyncSession):
-    session_post = await session.get(models.Post, post_id)
+    session_post = await session.get(Post, post_id)
     if not session_post:
         raise HTTPException(status_code=404, detail="Post not found")
     await session.delete(session_post)
