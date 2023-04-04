@@ -1,13 +1,14 @@
 import datetime
+from uuid import UUID
 # from . import templates
 from fastapi.responses import HTMLResponse
 from fastapi import APIRouter, Depends, HTTPException, WebSocket
 from sqlalchemy import insert, select
+from backend.crud import chat,base
 from backend.db.models import Chat, User, Message
 from backend.db.database import get_session
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.crud import chat
-from backend.crud import base
+from backend.app.users import current_active_user
 
 router = APIRouter()
 connected_websockets = set()
@@ -39,16 +40,22 @@ async def chat_ws(websocket: WebSocket, chat_id: int, user_id: int, session: Asy
             if ws != websocket:
                 await ws.send_text(f'{user.name}: {message}')
 
+
 # Homepage with a form to join a chat
 
 
 @router.post('/')
-async def create_chat(name: str, session: AsyncSession = Depends(get_session)):
+async def create_chat(name: str, owner: UUID = Depends(current_active_user), session: AsyncSession = Depends(get_session)):
     try:
-        return await chat.create_chat(name, session)
+        return await chat.create_chat(name, owner.id, session)
     except HTTPException as exception:
         raise HTTPException(
             status_code=503, detail=f"Database error: {exception}")
+
+
+# @router.get('/')
+# async def get_us(owner: UUID = Depends(current_active_user)):
+#     return await owner.id
 
 
 @router.get('/')

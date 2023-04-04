@@ -10,7 +10,7 @@ from backend.db.models import Chat, Message
 # Create a new chat instance
 
 
-async def create_chat(name, session: AsyncSession):
+async def create_chat(name, owner, session: AsyncSession):
     chats = insert(Chat)
     result = await session.execute(chats)
     return result.scalars().all()

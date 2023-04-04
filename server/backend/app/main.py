@@ -27,6 +27,9 @@ def create_app() -> FastAPI:
         swagger_ui_parameters=settings.SWAGGER_UI_PARAMETERS,
     )
 
+    @app.get("/", tags=['Welcome'])
+    async def welcome():
+        return {"message": "Welcome"}
     if settings.BACKEND_CORS_ORIGINS:
         app.add_middleware(
             CORSMiddleware,

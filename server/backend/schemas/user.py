@@ -32,4 +32,11 @@ class UserCreate(schemas.BaseUserCreate):
 
 
 class UserUpdate(schemas.BaseUserUpdate):
-    dick: dict
+    username: str
+    avatar: Optional[str]
+    email: str
+    password: str
+    role_id: int
+    is_active: Optional[bool]
+    is_superuser: Optional[bool] 
+    is_verified: Optional[bool] 

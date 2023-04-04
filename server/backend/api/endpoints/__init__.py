@@ -1,15 +1,11 @@
 from backend.app.users import auth_backend, fastapi_users
 from backend.schemas.user import UserCreate, UserRead, UserUpdate
-from . import example, chat, user
+from . import chat, user
 from fastapi import APIRouter
 
 
 router = APIRouter()
-router.include_router(
-    example.router,
-    prefix="/root",
-    tags=["root"],
-)
+
 router.include_router(
     chat.router,
     prefix="/chat",

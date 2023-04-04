@@ -13,20 +13,7 @@ role = Table(
     Column("name", String, nullable=False),
     Column("permissions", JSON),
 )
-photos = Table(
-    "photos",
-    Base.metadata,
-    Column("id", Integer, primary_key=True),
-    Column("name", String, nullable=False),
-    Column("permissions", JSON),
-)
-posts = Table(
-    "posts",
-    Base.metadata,
-    Column("id", Integer, primary_key=True),
-    Column("name", String, nullable=False),
-    Column("permissions", JSON),
-)
+
 
 user_chat = Table(
     'user_chat',
@@ -35,13 +22,28 @@ user_chat = Table(
     Column('chat_id', Integer, ForeignKey('chats.id'))
 )
 
+user_post = Table(
+    'user_post',
+    Base.metadata,
+    Column('user_id', UUID, ForeignKey('user.id')),
+    Column('post_id', Integer, ForeignKey('posts.id'))
+)
+user_community = Table(
+    'user_community',
+    Base.metadata,
+    Column('user_id', UUID, ForeignKey('user.id')),
+    Column('community_id', Integer, ForeignKey('communities.id'))
+)
+
 
 class Chat(Base):
     __tablename__ = 'chats'
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    owner = Column(ForeignKey('user.id'), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     messages = relationship('Message', backref='chat')
+
 
 # Define the association table between User and Chat
 
@@ -59,7 +61,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     hashed_password: str = Column(String(length=1024), nullable=False)
 
     chats = relationship('Chat', secondary='user_chat', backref='users')
-    # posts = relationship("posts", backref="user", lazy="dynamic")
+    posts = relationship("posts", backref="user", lazy="dynamic")
     # photos = relationship("photos", backref="user", lazy="dynamic")
 
     is_active: bool = Column(Boolean, default=True, nullable=False)
@@ -76,18 +78,14 @@ class Message(Base):
     user_id = Column(UUID(as_uuid=True), ForeignKey('user.id'))
 
     user = relationship('User', backref=backref('messages', order_by=id))
-
-
-
-class Comment(Base):
-    __tablename__ = 'comment'
+class Community(Base):
+    __tablename__ = 'communities'
     id = Column(Integer, primary_key=True)
-    text = Column(Text)
+    title = Column(String(255))
+    description = Column(Text)
+    owner = Column(ForeignKey('user.id'), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow,
-                        onupdate=datetime.utcnow)
-    content_id = Column(Integer, ForeignKey('content.id'))
-    content = relationship('Content', back_populates='comments')
+    
 
 
 class Content(Base):
@@ -97,3 +95,21 @@ class Content(Base):
     dislikes = Column(Integer, default=0)
     comments = relationship(
         'Comment', back_populates='content', cascade='all, delete-orphan')
+
+class Comment(Content):
+    __tablename__ = 'comment'
+    id = Column(Integer, primary_key=True)
+    text = Column(Text)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow,
+                        onupdate=datetime.utcnow)
+    content_id = Column(Integer, ForeignKey('content.id'))
+    content = relationship('Content', back_populates='comments')
+
+class Post(Content):
+    __tablename__ = 'posts'
+    id = Column(Integer, ForeignKey('content.id'), primary_key=True)
+    title = Column(String(255))
+    content = Column(Text)
+    owner = Column(ForeignKey('user.id'), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
