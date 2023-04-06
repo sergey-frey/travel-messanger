@@ -1,41 +1,40 @@
 from fastapi import Depends, HTTPException
-from sqlalchemy import insert, select
+from sqlalchemy import UUID, delete, insert, select, update
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
-from server.backend.db.models import Post
-from server.backend.schemas.post import PostUpdate
+from backend.db.models import Post
+from backend.schemas.post import PostUpdate
 
 
-async def _create_post(post, session: AsyncSession):
-    db_post = Post(title=post.title, content=post.content, owner=post.owner)
-    session.add(db_post)
+async def _create_post(post, owner_id, session: AsyncSession):
+    query = Post(title=post.title, content=post.content, owner_id=owner_id)
+    session.add(query)
     await session.commit()
-    await session.refresh(db_post)
-    return db_post
+    await session.refresh(query)
+    return query
 
 
-async def _read_posts(session: AsyncSession, skip: int = 0, limit: int = 5, ):
-    posts = await session.execute(Post.select().offset(skip).limit(limit))
+async def _read_posts(skip, limit, session: AsyncSession):
+    query = select(Post).offset(skip).limit(limit)
+    posts = await session.execute(query)
     return posts.scalars().all()
 
 
-async def _update_post(post_id: int, post: PostUpdate, session: AsyncSession):
-    session_post = await session.get(Post, post_id)
-    if not session_post:
-        raise HTTPException(status_code=404, detail="Post not found")
-    session_post.title = post.title
-    session_post.content = post.content
-    await session.commit()
-    await session.refresh(session_post)
-    return session_post
+async def _update_post(post_id: UUID, post: PostUpdate, session: AsyncSession):
+    query = update(Post).where(Post.id == post_id).values(title=post.title,
+                                                          content=post.content).returning(Post)
+    post_to_update = await session.execute(query)
+    update_user_id_row = post_to_update.fetchone()
+    if update_user_id_row:
+        await session.commit()
+        return update_user_id_row[0]
+    await session.refresh(post_to_update)
+    return post_to_update
 
 
-async def _delete_post(post_id: int, session: AsyncSession):
-    session_post = await session.get(Post, post_id)
-    if not session_post:
-        raise HTTPException(status_code=404, detail="Post not found")
-    await session.delete(session_post)
-    await session.commit()
-    return {"message": "Post deleted successfully"}
+async def _delete_post(post_id: UUID, session: AsyncSession):
+    query = delete(Post).where(Post.id == post_id)
+    post_to_delete = await session.execute(query)
+    if post_to_delete:
+        await session.commit()
+        return {"message": "Post deleted"}

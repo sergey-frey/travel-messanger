@@ -53,9 +53,9 @@ async def create_chat(name: str, owner: UUID = Depends(current_active_user), ses
             status_code=503, detail=f"Database error: {exception}")
 
 
-# @router.get('/')
-# async def get_us(owner: UUID = Depends(current_active_user)):
-#     return await owner.id
+@router.get('/')
+async def get_us(owner: UUID = Depends(current_active_user)):
+    return await owner.id
 
 
 @router.get('/')
@@ -65,11 +65,3 @@ async def get_all_chats(session: AsyncSession = Depends(get_session)):
     except HTTPException as exception:
         raise HTTPException(
             status_code=503, detail=f"Database error: {exception}")
-    # return templates.TemplateResponse('index.html', {'request': None, 'chats': chats})
-
-    # @router.get('/chat/{chat_id}/{user_id}', response_class=HTMLResponse)
-    # async def chat(request, chat_id: int, user_id: int):
-    #     # Retrieve the chat and user objects from the database
-    #     chat = session.query(Chat).filter_by(id=chat_id).first()
-    #     user = session.query(User).filter_by(id=user_id).first()
-    #     return templates.TemplateResponse('chat.html', {'request': request, 'chat': chat, 'user': user})

@@ -19,26 +19,26 @@ user_chat = Table(
     'user_chat',
     Base.metadata,
     Column('user_id', UUID, ForeignKey('user.id')),
-    Column('chat_id', Integer, ForeignKey('chats.id'))
+    Column('chat_id', UUID, ForeignKey('chats.id'))
 )
 
 user_post = Table(
     'user_post',
     Base.metadata,
     Column('user_id', UUID, ForeignKey('user.id')),
-    Column('post_id', Integer, ForeignKey('posts.id'))
+    Column('post_id', UUID, ForeignKey('posts.id'))
 )
 user_community = Table(
     'user_community',
     Base.metadata,
     Column('user_id', UUID, ForeignKey('user.id')),
-    Column('community_id', Integer, ForeignKey('communities.id'))
+    Column('community_id', UUID, ForeignKey('communities.id'))
 )
 
 
 class Chat(Base):
     __tablename__ = 'chats'
-    id = Column(Integer, primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String)
     owner = Column(ForeignKey('user.id'), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -60,8 +60,8 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     registered_at = Column(TIMESTAMP, default=datetime.utcnow)
     hashed_password: str = Column(String(length=1024), nullable=False)
 
-    chats = relationship('Chat', secondary='user_chat', backref='users')
-    posts = relationship("posts", backref="user", lazy="dynamic")
+    chats = relationship('Chat', secondary='user_chat', backref='user')
+    posts = relationship("Post", secondary="user_post", backref="user")
     # photos = relationship("photos", backref="user", lazy="dynamic")
 
     is_active: bool = Column(Boolean, default=True, nullable=False)
@@ -71,45 +71,52 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
 
 class Message(Base):
     __tablename__ = 'messages'
-    id = Column(Integer, primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     text = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
-    chat_id = Column(Integer, ForeignKey('chats.id'))
+    chat_id = Column(UUID, ForeignKey('chats.id'))
     user_id = Column(UUID(as_uuid=True), ForeignKey('user.id'))
 
     user = relationship('User', backref=backref('messages', order_by=id))
+
+
 class Community(Base):
     __tablename__ = 'communities'
-    id = Column(Integer, primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     title = Column(String(255))
     description = Column(Text)
     owner = Column(ForeignKey('user.id'), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
-    
 
 
-class Content(Base):
-    __tablename__ = 'content'
-    id = Column(Integer, primary_key=True)
+class Post(Base):
+    __tablename__ = 'posts'
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    title = Column(String(255), index=True)
     likes = Column(Integer, default=0)
     dislikes = Column(Integer, default=0)
+    content = Column(Text, index=True)
+    owner_id = Column(ForeignKey('user.id'), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     comments = relationship(
-        'Comment', back_populates='content', cascade='all, delete-orphan')
+        'Comment', back_populates='post', cascade='all, delete-orphan')
 
-class Comment(Content):
-    __tablename__ = 'comment'
-    id = Column(Integer, primary_key=True)
-    text = Column(Text)
-    created_at = Column(DateTime, default=datetime.utcnow)
+
+class Comment(Base):
+    __tablename__ = 'comments'
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    text = Column(Text, index=True)
+    likes = Column(Integer, default=0)
+    dislikes = Column(Integer, default=0)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow,
                         onupdate=datetime.utcnow)
-    content_id = Column(Integer, ForeignKey('content.id'))
-    content = relationship('Content', back_populates='comments')
+    post_id = Column(UUID, ForeignKey('posts.id'))
+    parent_id = Column(UUID, ForeignKey('comments.id'))
 
-class Post(Content):
-    __tablename__ = 'posts'
-    id = Column(Integer, ForeignKey('content.id'), primary_key=True)
-    title = Column(String(255))
-    content = Column(Text)
-    owner = Column(ForeignKey('user.id'), nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    children = relationship("Comment",
+                            cascade="all, delete-orphan",
+                            backref=backref('parent', remote_side=[id]))
+    post = relationship("Post", back_populates="comments")
+

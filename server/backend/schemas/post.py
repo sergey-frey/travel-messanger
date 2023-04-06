@@ -7,24 +7,29 @@ from backend.schemas.comment import Comment
 
 
 class PostBase(ContentBase):
+    id: UUID  # Added id field to the Post model.
     title: str
     content: str
-    owner: UUID
+    owner_id: UUID
+    created_at: datetime  # Added created_at field to the Post model.
+    # comments: List[Comment] = []  # Added comments field to the Post model.
 
 
-class PostCreate(PostBase):
-    pass
+class PostCreate(BaseModel):
+    title: str
+    content: str
 
 
-class PostUpdate(PostBase):
+class PostUpdate(BaseModel):
+    title: str
+    content: str
+
+class PostDelete(BaseModel):
     pass
 
 
 class Post(PostBase):
-    id: int
-    owner: int
-    created_at: datetime
-    comments: List[Comment] = []
+    pass
 
     class Config:
         orm_mode = True
