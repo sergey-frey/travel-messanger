@@ -1,0 +1,83 @@
+.post-images {
+  width: 100%;
+  .images {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    min-height: 400px;
+    background-image: url('https://fakeimg.pl/300x600/6c25be/?text=image');
+    background-repeat: no-repeat;
+    background-size: cover;
+    // background-position: ;
+    cursor: pointer;
+    .arrow-btn {
+      display: none;
+      z-index: 1;
+      position: absolute;
+      height: 100%;
+      width: 50%;
+      top: 0;
+      align-items: center;
+      border: none;
+      background: none;
+      cursor: pointer;
+      .arrow-image {
+        height: 30px;
+        width: 30px;
+        opacity: 0.7;
+      }
+    }
+    .arrow-btn_right {
+      justify-content: end;
+      right: 0;
+    }
+    .arrow-btn_left {
+      justify-content: start;
+      left: 0;
+    }
+    .blur {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(20px);
+      .image {
+        max-height: 500px;
+        max-width: 100%;
+        display: none;
+      }
+      .image_active {
+        display: block;
+      }
+    }
+  }
+  .images:hover .arrow-btn{
+    display: flex;
+  }
+  .dot-btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 0;
+  }
+  .dot-btn {
+    padding: 0;
+    height: 11px;
+    width: 11px;
+    border-radius: 50%;
+    border: none;
+    background: #cccccc;
+    cursor: pointer;
+  }
+  .dot-btn:hover {
+    background: #bbb9b9;
+  }
+  .dot-btn_active {
+    background: var(--tui-primary);
+  }
+  .dot-btn_active:hover {
+    background: var(--tui-primary-hover);
+  }
+}
