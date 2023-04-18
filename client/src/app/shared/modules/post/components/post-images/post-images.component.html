@@ -1,0 +1,38 @@
+<div class="post-images">
+  <div class="images">
+    <button class="arrow-btn arrow-btn_left">
+      <tui-svg
+        class="arrow-image"
+        src="tuiIconChevronLeftLarge"
+      ></tui-svg>
+    </button>
+    <tui-carousel [(index)]="index">
+      <ng-container *ngFor="let src of imageSources; first as isFirst">
+        <div
+          class="image-wrapper"
+          *tuiItem
+        >
+          <div class="blur">
+            <img
+              [src]="src"
+              class="image"
+              alt="image"
+            />
+          </div>
+        </div>
+      </ng-container>
+    </tui-carousel>
+    <button class="arrow-btn arrow-btn_right">
+      <tui-svg
+        class="arrow-image"
+        src="tuiIconChevronRightLarge"
+      ></tui-svg>
+    </button>
+  </div>
+  <tui-pagination
+    size="s"
+    class="pagination"
+    [length]="imageSources.length"
+    [(index)]="index"
+  ></tui-pagination>
+</div>

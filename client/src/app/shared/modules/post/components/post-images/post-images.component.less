@@ -1,0 +1,67 @@
+.pagination {
+  margin-top: 10px;
+}
+.post-images {
+  width: 100%;
+  .images {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    .arrow-btn {
+      display: none;
+      z-index: 1;
+      position: absolute;
+      height: 100%;
+      width: 50%;
+      top: 0;
+      align-items: center;
+      border: none;
+      background: none;
+      cursor: pointer;
+      .arrow-image {
+        font-size: 40px;
+        opacity: 0.7;
+      }
+    }
+    .arrow-btn_right {
+      justify-content: end;
+      right: 0;
+    }
+    .arrow-btn_left {
+      justify-content: start;
+      left: 0;
+    }
+    .image-wrapper {
+      width: 470px;
+      height: 500px;
+      max-height: 500px;
+      max-width: 470px;
+      background-image: url('../../../../../../assets/images/blur-example.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      .blur {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 500px;
+        width: 470px;
+        max-height: 500px;
+        max-width: 470px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(20px);
+        .image {
+          max-width: inherit;
+          max-height: inherit;
+        }
+      }
+      // }
+    }
+  }
+  .images:hover .arrow-btn {
+    display: flex;
+  }
+}
+::ng-deep fieldset {
+  padding: 0 !important;
+}
