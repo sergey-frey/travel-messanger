@@ -3,7 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from backend.crud.post import _create_post, _update_post, _read_posts, _delete_post
 from backend.db.database import get_session
-from backend.schemas.post import PostCreate, PostDelete, PostUpdate, Post
+from backend.dto.post import PostCreate, PostDelete, PostUpdate, Post
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.app.users import current_active_user
 

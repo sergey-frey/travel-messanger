@@ -1,67 +1,122 @@
-import datetime
+from typing import Any, Optional
 from uuid import UUID
-# from . import templates
-from fastapi.responses import HTMLResponse
-from fastapi import APIRouter, Depends, HTTPException, WebSocket
-from sqlalchemy import insert, select
-from backend.crud import chat,base
-from backend.db.models import Chat, User, Message
+from backend.crud.chat import _create_chat, _delete_chat, _update_chat, _get_chats
+from backend.dto.chat import ChatUpdate
 from backend.db.database import get_session
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.app.users import current_active_user
+from fastapi import APIRouter, Depends, HTTPException, WebSocket
+
+from backend.app.room import Room, log
+from backend.dto.user import UserRead
+from starlette.endpoints import WebSocketEndpoint
+
 
 router = APIRouter()
-connected_websockets = set()
-
-
-@router.websocket('/ws/{chat_id}/{user_id}')
-async def chat_ws(websocket: WebSocket, chat_id: int, user_id: int, session: AsyncSession = Depends(get_session)):
-    # Accept the websocket connection
-    await websocket.accept()
-
-    # Add the websocket to the set of connected websockets
-    connected_websockets.add(websocket)
-
-    # Retrieve the chat and user objects from the database
-    chat = chat.get_chat(chat_id)
-    user = base.get_user(user_id)
-
-    # Loop to receive and broadcast messages
-    while True:
-        message = await websocket.receive_text()
-        now = datetime.utcnow()
-        message_obj = Message(text=message, chat=chat,
-                              user=user, created_at=now)
-        session.add(message_obj)
-        session.commit()
-
-        # Broadcast the message to all connected websockets in the chat
-        for ws in connected_websockets:
-            if ws != websocket:
-                await ws.send_text(f'{user.name}: {message}')
-
-
 # Homepage with a form to join a chat
 
 
-@router.post('/')
-async def create_chat(name: str, owner: UUID = Depends(current_active_user), session: AsyncSession = Depends(get_session)):
+@router.websocket_route("/ws", name="ws")
+class RoomLive(WebSocketEndpoint):
+    """Live connection to the global :class:`~.Room` instance, via WebSocket."""
+
+    encoding: str = "text"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.room: Optional[Room] = None
+        self.user_id: Optional[str] = None
+        self.session: AsyncSession = Depends(get_session)
+        self.current_user: UserRead = Depends(current_active_user)
+
+    @classmethod
+    def get_next_user_id(cls):
+        """Returns monotonically increasing numbered usernames in the form
+        'user_[number]'
+        """
+        # user_id: str = f"Adolf Hitler"
+        user_id: str = current_active_user.username
+        return user_id
+
+    async def on_connect(self, websocket):
+        """Handle a new connection.
+
+        New users are assigned a user ID and notified of the room's connected
+        users. The other connected users are notified of the new user's arrival,
+        and finally the new user is added to the global :class:`~.Room` instance.
+        """
+        log.info("Connecting new user...")
+        room: Optional[Room] = self.scope.get("room")
+        if room is None:
+            raise RuntimeError(f"Global `Room` instance unavailable!")
+        self.room = room
+        self.user_id = self.get_next_user_id()
+        await websocket.accept()
+        await websocket.send_json(
+            {"type": "ROOM_JOIN", "data": {"user_id": self.user_id}}
+        )
+        await self.room.broadcast_user_joined(self.user_id)
+        self.room.add_user(self.user_id, websocket)
+
+    async def on_disconnect(self, _websocket: WebSocket, _close_code: int):
+        """Disconnect the user, removing them from the :class:`~.Room`, and
+        notifying the other users of their departure.
+        """
+        if self.user_id is None:
+            raise RuntimeError(
+                "RoomLive.on_disconnect() called without a valid user_id"
+            )
+        self.room.remove_user(self.user_id)
+        await self.room.broadcast_user_left(self.user_id)
+
+    async def on_receive(self, _websocket: WebSocket, msg: Any):
+        """Handle incoming message: `msg` is forwarded straight to `broadcast_message`."""
+        if self.user_id is None:
+            raise RuntimeError(
+                "RoomLive.on_receive() called without a valid user_id")
+        if not isinstance(msg, str):
+            raise ValueError(
+                f"RoomLive.on_receive() passed unhandleable data: {msg}")
+        await self.room.broadcast_message(self.user_id, msg)
+
+
+@router.post("/")
+async def create_chat(
+    name: str,
+    owner: UUID = Depends(current_active_user),
+    session: AsyncSession = Depends(get_session),
+):
     try:
-        return await chat.create_chat(name, owner.id, session)
+        return await _create_chat(name, owner.id, session)
     except HTTPException as exception:
         raise HTTPException(
             status_code=503, detail=f"Database error: {exception}")
 
 
-@router.get('/')
-async def get_us(owner: UUID = Depends(current_active_user)):
-    return await owner.id
-
-
-@router.get('/')
+@router.get("/")
 async def get_all_chats(session: AsyncSession = Depends(get_session)):
     try:
-        return await chat.get_chats(session)
+        return await _get_chats(session)
+    except HTTPException as exception:
+        raise HTTPException(
+            status_code=503, detail=f"Database error: {exception}")
+
+
+@router.put("/")
+async def update_chats(
+    chat_id: UUID, chat: ChatUpdate, session: AsyncSession = Depends(get_session)
+):
+    try:
+        return await _update_chat(chat_id, chat, session)
+    except HTTPException as exception:
+        raise HTTPException(
+            status_code=503, detail=f"Database error: {exception}")
+
+
+@router.delete("/")
+async def delete_chat(chat_id: UUID, session: AsyncSession = Depends(get_session)):
+    try:
+        return await _delete_chat(chat_id, session)
     except HTTPException as exception:
         raise HTTPException(
             status_code=503, detail=f"Database error: {exception}")

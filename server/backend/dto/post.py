@@ -2,8 +2,8 @@ from uuid import UUID
 from typing import List, Optional
 from datetime import datetime
 from pydantic import BaseModel
-from backend.schemas import ContentBase
-from backend.schemas.comment import Comment
+from backend.dto import ContentBase
+from backend.dto.comment import Comment
 
 
 class PostBase(ContentBase):

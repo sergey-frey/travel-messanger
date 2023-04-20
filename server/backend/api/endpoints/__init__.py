@@ -1,6 +1,6 @@
 from backend.app.users import auth_backend, fastapi_users
-from backend.schemas.user import UserCreate, UserRead, UserUpdate
-from . import chat, user, post
+from backend.dto.user import UserCreate, UserRead, UserUpdate
+from . import chat, user, post,test
 from fastapi import APIRouter
 
 
@@ -17,14 +17,19 @@ router.include_router(
     tags=["post"],
 )
 router.include_router(
+    test.router,
+    prefix="/test",
+    tags=["test"],
+)
+router.include_router(
     chat.router,
     prefix="/chat",
     tags=["chat"],
 )
 router.include_router(
     user.router,
-    prefix="/auth",
-    tags=["auth"],
+    prefix="/users",
+    tags=["users"],
 )
 router.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -49,6 +54,6 @@ router.include_router(
 )
 router.include_router(
     fastapi_users.get_users_router(UserRead, UserUpdate),
-    prefix="/users",
-    tags=["users"],
+    prefix="/auth",
+    tags=["auth"],
 )

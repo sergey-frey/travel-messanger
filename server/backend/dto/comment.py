@@ -1,6 +1,6 @@
 from uuid import UUID
 from datetime import datetime
-from backend.schemas import ContentBase
+from backend.dto import ContentBase
 
 
 class CommentBase(ContentBase):

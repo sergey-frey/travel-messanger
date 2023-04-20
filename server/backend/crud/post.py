@@ -3,7 +3,7 @@ from sqlalchemy import UUID, delete, insert, select, update
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.db.models import Post
-from backend.schemas.post import PostUpdate
+from backend.dto.post import PostUpdate
 
 
 async def _create_post(post, owner_id, session: AsyncSession):
