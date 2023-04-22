@@ -1,5 +1,5 @@
 from backend.api import api_router
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from backend.db import settings
 from backend.utils.exception_handlers import (
@@ -10,6 +10,7 @@ from backend.utils.exception_handlers import (
 from sqlalchemy.exc import DBAPIError, NoResultFound
 from fastapi.responses import FileResponse
 from backend.middleware.events.room import RoomEventMiddleware
+from backend.api.endpoints.chat import get_current_user
 
 
 def create_app() -> FastAPI:
@@ -29,7 +30,6 @@ def create_app() -> FastAPI:
         openapi_url="{0}/openapi.json".format(settings.DOCS),
         swagger_ui_parameters=settings.SWAGGER_UI_PARAMETERS,
     )
-
     @app.get("/")
     def welcome():
         """Serve static index page."""

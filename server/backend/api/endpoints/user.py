@@ -43,3 +43,4 @@ async def get_user_info(request: Request, user_name: str):
     if user is None:
         raise HTTPException(404, detail=f"No such user: {user_name}")
     return user
+

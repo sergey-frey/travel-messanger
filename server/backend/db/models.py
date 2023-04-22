@@ -120,3 +120,5 @@ class Comment(Base):
                             backref=backref('parent', remote_side=[id]))
     post = relationship("Post", back_populates="comments")
 
+
+UserChat = user_chat()
