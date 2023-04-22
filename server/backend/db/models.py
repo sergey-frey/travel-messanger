@@ -21,6 +21,12 @@ user_chat = Table(
     Column('user_id', UUID, ForeignKey('user.id')),
     Column('chat_id', UUID, ForeignKey('chats.id'))
 )
+user_chat_bans = Table(
+    'user_chat_bans',
+    Base.metadata,
+    Column('user_id', UUID, ForeignKey('user.id')),
+    Column('chat_id', UUID, ForeignKey('chats.id'))
+)
 
 user_post = Table(
     'user_post',
@@ -121,4 +127,5 @@ class Comment(Base):
     post = relationship("Post", back_populates="comments")
 
 
-UserChat = user_chat()
+UserChat = user_chat
+UserChatBans = user_chat_bans

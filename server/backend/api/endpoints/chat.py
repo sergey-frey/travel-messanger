@@ -22,10 +22,14 @@ manager = ConnectionManager(room)
 async def get_current_user(websocket: WebSocket, user=Depends(current_active_user)):
     return user
 
+# , current_user=Depends(get_current_user)
+
 
 @router.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket, current_user=Depends(get_current_user)):
-    await manager.connect(websocket, current_user.id)
+async def websocket_endpoint(websocket: WebSocket, session: AsyncSession = Depends(get_session)):
+    chat_id = "45d5725d-09b5-48e2-bb88-1321ea9306f1"
+    current_user = "b23f9eaf-6318-4e3d-b4e6-d0a1cc9d012e"
+    await manager.connect(chat_id, current_user, websocket, session)
 
 # @router.websocket("/ws")
 # async def websocket_endpoint(websocket: WebSocket):

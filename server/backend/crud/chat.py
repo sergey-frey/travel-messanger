@@ -24,7 +24,7 @@ class ConnectionManager:
         self.room = room
         self.active_connections: List[WebSocket] = []
 
-    async def connect(self, websocket: WebSocket, session: AsyncSession, chat_id: UUID, user_id: UUID):
+    async def connect(self, chat_id, user_id, websocket: WebSocket, session: AsyncSession):
         await websocket.accept()
         self.active_connections.append(websocket)
         await websocket.send_json({"type": "ROOM_JOIN", "data": {"user_id": user_id}})
@@ -38,8 +38,8 @@ class ConnectionManager:
         if stmt is None:
             room = Room(id=self.room.id)
             session.add(room)
-        room.users.append(user)
-        session.commit()
+        # self.room.add_user(user_id, websocket)
+        await session.commit()
         await self.room.broadcast_user_joined(user_id)
         self.room.add_user(user_id, websocket)
 
@@ -51,19 +51,25 @@ class ConnectionManager:
             self.disconnect(websocket)
 
     def disconnect(self, websocket: WebSocket):
-        for user_id, conn in self.room.users.items():
+        for user_id, conn in self.room._users.items():
             if conn == websocket:
                 self.room.remove_user(user_id)
                 self.active_connections.remove(websocket)
                 asyncio.create_task(self.room.broadcast_user_left(user_id))
                 break
 
-    async def send_personal_message(self, message: str, websocket: WebSocket):
-        await websocket.send_text(message)
+    async def kick(self, user_id, conn):
+        pass
 
-    async def broadcast(self, message: str):
+    async def ban(self, user_id, conn):
+        pass
+
+    async def send_personal_message(self, message: str, websocket: WebSocket):
+        await websocket.send_json({"message": message, "user_ids": self.room._users})
+
+    async def broadcast(self, message: str, user_ids: List[UUID]):
         for connection in self.active_connections:
-            await connection.send_text(message)
+            await connection.send_json({"message": message, "user_ids": user_ids})
 
 
 async def _add_user_to_chat(user_id, chat_id):

@@ -7,7 +7,7 @@ from pydantic import BaseModel
 class UserInfo(BaseModel):
     """Chatroom user metadata."""
 
-    user_id: str
+    user_id: UUID
     connected_at: float
     message_count: int
 
@@ -15,7 +15,7 @@ class UserInfo(BaseModel):
 class UserListResponse(BaseModel):
     """Response model for /list_users endpoint."""
 
-    users: List[str]
+    users: List[UUID]
 
 
 class ChatBase(BaseModel):
