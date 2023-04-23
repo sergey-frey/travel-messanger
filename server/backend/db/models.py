@@ -81,7 +81,7 @@ class Message(Base):
     text = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
     chat_id = Column(UUID, ForeignKey('chats.id'))
-    user_id = Column(UUID(as_uuid=True), ForeignKey('user.id'))
+    user_id = Column(UUID, ForeignKey('user.id'))
 
     user = relationship('User', backref=backref('messages', order_by=id))
 

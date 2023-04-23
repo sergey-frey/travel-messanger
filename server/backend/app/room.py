@@ -59,6 +59,7 @@ class Room:
         Raises:
             ValueError: If the `user_id` is not held within the room.
         """
+
         if user_id not in self._users:
             raise ValueError(f"User {user_id} is not in the room")
         await self._users[user_id].send_json(
@@ -70,9 +71,9 @@ class Room:
         log.info("Kicking user %s from room", user_id)
         await self._users[user_id].close()
 
-    async def ban_user(self, user_id: UUID):
+    async def banned_user(self, user_id: UUID):
         """Ban a user from the chatroom
-        
+
         Raises:
             ValueError: If the `user_id` is not held within the room.
         """
@@ -80,11 +81,12 @@ class Room:
             raise ValueError(f"User {user_id} is not in the room")
         await self._users[user_id].send_json(
             {
-                "type": "ROOM_KICK",
-                "data": {"msg": "You have been kicked from the chatroom!"},
+                "type": "ROOM_BAN",
+                "data": {"msg": "You have been banned from the chatroom!"},
             }
         )
-        log.info("Kicking user %s from room", user_id)
+        log.info("Banned user %s from room", user_id)
+        self._users_bans.append(user_id)
         await self._users[user_id].close()
 
     def remove_user(self, user_id: UUID):
