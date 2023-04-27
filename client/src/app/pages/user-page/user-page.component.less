@@ -2,12 +2,12 @@
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(2, 240px);
+  grid-template-rows: 240px 240px auto;
   gap: 30px;
-  // grid-template-rows: 1fr 1fr;
   grid-template-areas:
   "actions info info info info"
-  "photos photos photos friends friends";
+  "photos photos photos photos friends"
+  "post-feed post-feed . . .";
 }
 .actions {
   grid-area: actions;
@@ -20,4 +20,7 @@
 }
 .friends {
   grid-area: friends;
+}
+.post-feed {
+  grid-area: post-feed;
 }
