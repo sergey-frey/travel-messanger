@@ -6,11 +6,12 @@ import { PostControlBarComponent } from './components/post-control-bar/post-cont
 import { PostImagesComponent } from './components/post-images/post-images.component';
 import { TuiSvgModule} from '@taiga-ui/core';
 import {TuiCarouselModule, TuiPaginationModule} from '@taiga-ui/kit';
+import { PostHeaderComponent } from './components/post-header/post-header.component';
 
 
 
 @NgModule({
-  declarations: [PostComponent, PostControlBarComponent, PostImagesComponent],
+  declarations: [PostComponent, PostControlBarComponent, PostImagesComponent, PostHeaderComponent],
   imports: [CommonModule, TuiButtonModule, TuiSvgModule, TuiCarouselModule, TuiPaginationModule],
   exports: [PostComponent]
 })
