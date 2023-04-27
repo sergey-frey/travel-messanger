@@ -1,4 +1,3 @@
-import { PostModule } from './../../shared/modules/post/post.module';
 import { UserAvatarModule } from './../../shared/modules/user-avatar/user-avatar.module';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -13,6 +12,7 @@ import { UserPageSectionComponent } from './components/user-page-section/user-pa
 import { OnlineBadgeComponent } from './components/online-badge/online-badge.component';
 import { FriendItemComponent } from './components/friend-item/friend-item.component';
 import { ImageItemComponent } from './components/image-item/image-item.component';
+import { PostFeedModule } from '@shared/modules/post-feed/post-feed.module';
 
 @NgModule({
   declarations: [
@@ -32,7 +32,7 @@ import { ImageItemComponent } from './components/image-item/image-item.component
     TuiSvgModule,
     TuiBadgeModule,
     UserAvatarModule,
-    PostModule
+    PostFeedModule
   ],
   exports: [UserPageComponent]
 })
