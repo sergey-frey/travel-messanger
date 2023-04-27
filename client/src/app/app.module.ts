@@ -14,10 +14,9 @@ import { StoreModule } from '@ngrx/store';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PostFeedComponent } from './shared/modules/post-feed/post-feed.component';
-import { PostFeedPipe } from './shared/modules/post-feed.pipe';
 
 @NgModule({
-  declarations: [AppComponent, PostFeedComponent, PostFeedPipe],
+  declarations: [AppComponent],
   imports: [
     UserPageModule,
     BrowserModule,

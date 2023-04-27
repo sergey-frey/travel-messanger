@@ -6,9 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./post-feed.component.less']
 })
 export class PostFeedComponent {
-<<<<<<< Updated upstream
   posts: Object[] = [{}, {}, {}];
-=======
-
->>>>>>> Stashed changes
 }
