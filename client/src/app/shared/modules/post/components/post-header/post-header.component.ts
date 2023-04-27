@@ -11,8 +11,8 @@ export class PostHeaderComponent {
     '../../../../../../assets/images/img-example.png';
   userFirstName: string = 'Серёжа';
   userLastName: string = 'Тенькаев';
-  postCreationTime: any = moment() // с типом object не получается использовать метод from :(
-    .set({ month: 3, date: 23, hours: 10, minutes: 38, seconds: 0 })
+  postCreationTime: moment.Moment = moment() 
+    .set({ month: 3, date: 27, hours: 14, minutes: 38, seconds: 0 })
     .locale('ru');
 
   constructor() {}
