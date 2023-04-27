@@ -12,25 +12,51 @@ from backend.app.room import Room, log
 from backend.dto.user import UserRead
 from starlette.endpoints import WebSocketEndpoint
 from backend.dto.user import UserRead
-from backend.crud.chat import ConnectionManager
+from backend.crud.manager import ConnectionManager
 
 router = APIRouter()
-# Homepage with a form to join a chat
+
 room = Room()
 manager = ConnectionManager(room)
 
 
-async def get_current_user(websocket: WebSocket, user=Depends(current_active_user)):
-    return user
-
-# , current_user=Depends(get_current_user)
-
-
 @router.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket, session: AsyncSession = Depends(get_session)):
-    chat_id = "45d5725d-09b5-48e2-bb88-1321ea9306f1"
+async def websocket_endpoint(
+    websocket: WebSocket, session: AsyncSession = Depends(get_session)
+):
     current_user = str(uuid.uuid4())
-    await manager.connect(chat_id, current_user, websocket, session)
+    chat_id = "6e5ef0d7-c563-42aa-a513-4e1cd88a7ee3"
+    # receiver_id = "8805d0e6-f627-4e61-baab-409aa8d7d490"
+    await manager.connect(chat_id, None, current_user, websocket, session)
+
+
+# @router.websocket("/ws/personal_chat/{receiver_id}")
+# async def websocket_endpoint_personal_messege(
+#     websocket: WebSocket,
+#     sender_id: str,
+#     receiver_id: str,
+#     session: AsyncSession = Depends(get_session),
+# ):
+#     await manager.connect(
+#         session, websocket, sender_id=sender_id, receiver_id=receiver_id
+#     )
+
+
+# @router.websocket("/ws/moderator")
+# async def websocket_moderator_endpoint(websocket: WebSocket,
+#                                        chat_info: dict = Depends(chat_info_vars)):
+#     # check the user is allowed into the chat room
+#     # verified = await verify_user_for_room(chat_info)
+#     # open connection
+
+#     if not chat_info['username'] == 'moderator':
+#         print('failed verification')
+#         await websocket.close()
+#         return
+
+#     await websocket.accept()
+#     # spin up coro's for inbound and outbound communication over the socket
+#     await asyncio.gather(ws_send_moderator(websocket, chat_info))
 
 
 @router.post("/")
@@ -42,8 +68,7 @@ async def create_chat(
     try:
         return await _create_chat(name, owner.id, session)
     except HTTPException as exception:
-        raise HTTPException(
-            status_code=503, detail=f"Database error: {exception}")
+        raise HTTPException(status_code=503, detail=f"Database error: {exception}")
 
 
 @router.get("/")
@@ -51,8 +76,7 @@ async def get_all_chats(session: AsyncSession = Depends(get_session)):
     try:
         return await _get_chats(session)
     except HTTPException as exception:
-        raise HTTPException(
-            status_code=503, detail=f"Database error: {exception}")
+        raise HTTPException(status_code=503, detail=f"Database error: {exception}")
 
 
 @router.put("/")
@@ -62,8 +86,7 @@ async def update_chats(
     try:
         return await _update_chat(chat_id, chat, session)
     except HTTPException as exception:
-        raise HTTPException(
-            status_code=503, detail=f"Database error: {exception}")
+        raise HTTPException(status_code=503, detail=f"Database error: {exception}")
 
 
 @router.delete("/")
@@ -71,5 +94,4 @@ async def delete_chat(chat_id: UUID, session: AsyncSession = Depends(get_session
     try:
         return await _delete_chat(chat_id, session)
     except HTTPException as exception:
-        raise HTTPException(
-            status_code=503, detail=f"Database error: {exception}")
+        raise HTTPException(status_code=503, detail=f"Database error: {exception}")

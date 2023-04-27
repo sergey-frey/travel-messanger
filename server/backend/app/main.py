@@ -9,8 +9,7 @@ from backend.utils.exception_handlers import (
 )
 from sqlalchemy.exc import DBAPIError, NoResultFound
 from fastapi.responses import FileResponse
-from backend.middleware.events.room import RoomEventMiddleware
-from backend.api.endpoints.chat import get_current_user
+from backend.middleware import RoomEvent
 
 
 def create_app() -> FastAPI:
@@ -30,6 +29,7 @@ def create_app() -> FastAPI:
         openapi_url="{0}/openapi.json".format(settings.DOCS),
         swagger_ui_parameters=settings.SWAGGER_UI_PARAMETERS,
     )
+
     @app.get("/")
     def welcome():
         """Serve static index page."""
@@ -43,7 +43,7 @@ def create_app() -> FastAPI:
             allow_headers=["*"],
             allow_credentials=True,
         )
-    app.add_middleware(RoomEventMiddleware)
+    app.add_middleware(RoomEvent)
     app.include_router(api_router, prefix=settings.API)
     app.add_exception_handler(DBAPIError, database_error_handler)
     app.add_exception_handler(HTTPException, http_exception_handler)

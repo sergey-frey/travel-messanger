@@ -10,7 +10,8 @@ from fastapi.websockets import WebSocket
 
 from backend.dto.chat import UserInfo
 
-log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger("FastAPI app")
 
 
 class Room:
@@ -49,6 +50,7 @@ class Room:
         self._user_meta[user_id] = UserInfo(
             user_id=user_id, connected_at=time.time(), message_count=0
         )
+        print(self._users)
 
     async def kick_user(self, user_id: UUID):
         """Forcibly disconnect a user from the room.
@@ -86,8 +88,8 @@ class Room:
             }
         )
         log.info("Banned user %s from room", user_id)
-        self._users_bans.append(user_id)
-        await self._users[user_id].close()
+        # self._users[user_id] = websocket
+        await self._users_bans[user_id].close()
 
     def remove_user(self, user_id: UUID):
         """Remove a user from the room.

@@ -21,8 +21,12 @@ async def _read_posts(skip, limit, session: AsyncSession):
 
 
 async def _update_post(post_id: UUID, post: PostUpdate, session: AsyncSession):
-    query = update(Post).where(Post.id == post_id).values(title=post.title,
-                                                          content=post.content).returning(Post)
+    query = (
+        update(Post)
+        .where(Post.id == post_id)
+        .values(title=post.title, content=post.content)
+        .returning(Post)
+    )
     post_to_update = await session.execute(query)
     update_user_id_row = post_to_update.fetchone()
     if update_user_id_row:

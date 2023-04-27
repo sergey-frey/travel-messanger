@@ -19,6 +19,7 @@ async def create_database(url: str) -> None:
 
     await engine.dispose()
 
+
 engine = create_async_engine(
     settings.DATABASE_URI,
     pool_pre_ping=True,
@@ -31,9 +32,11 @@ factory = async_sessionmaker(
     expire_on_commit=False,
 )
 
+
 async def get_session() -> AsyncGenerator[AsyncSession, None]:  # noqa: WPS430, WPS442
     async with factory() as session:
         yield session
+
 
 override_session = get_session()
 context_session = get_session()

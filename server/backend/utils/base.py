@@ -17,7 +17,7 @@ class Base(object):
 
     id = sa.Column(
         psql.UUID(as_uuid=True),
-        server_default=sa.text('gen_random_uuid()'),
+        server_default=sa.text("gen_random_uuid()"),
         primary_key=True,
         index=True,
     )

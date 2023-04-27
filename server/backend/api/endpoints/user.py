@@ -25,6 +25,7 @@ router = APIRouter()
 #         raise HTTPException(
 #             status_code=503, detail=f"Database error: {exception}")
 
+
 @router.get("/", response_model=UserListResponse)
 async def list_users(request: Request):
     """List all users connected to the room."""
@@ -43,4 +44,3 @@ async def get_user_info(request: Request, user_name: str):
     if user is None:
         raise HTTPException(404, detail=f"No such user: {user_name}")
     return user
-

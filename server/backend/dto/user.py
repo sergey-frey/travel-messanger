@@ -14,7 +14,7 @@ class UserRead(schemas.BaseUser[int]):
     is_active: bool = True
     is_superuser: bool = False
     is_verified: bool = False
-    wrap: Optional[Callable[..., Any]] = Field(default=None, alias='_')
+    wrap: Optional[Callable[..., Any]] = Field(default=None, alias="_")
 
     class Config:
         orm_mode = True
@@ -38,5 +38,5 @@ class UserUpdate(schemas.BaseUserUpdate):
     password: str
     role_id: int
     is_active: Optional[bool]
-    is_superuser: Optional[bool] 
-    is_verified: Optional[bool] 
+    is_superuser: Optional[bool]
+    is_verified: Optional[bool]

@@ -24,6 +24,7 @@ class PostUpdate(BaseModel):
     title: str
     content: str
 
+
 class PostDelete(BaseModel):
     pass
 
