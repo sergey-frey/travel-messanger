@@ -4,17 +4,23 @@
   padding: 12px 30px;
   display: flex;
   justify-content: center;
+  margin-bottom: 15px;
   .shadow(4);
-
+  .header__container {
+    width: 100%;
+    // padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 15px;
+  }
   &__content {
     width: 100%;
     max-width: 1200px;
     display: flex;
-    justify-content: space-between;
+    align-items: center;
   }
-
-  &__left-side,
-  &__right-side {
+  .right-side {
     display: flex;
     align-items: center;
     gap: 15px;
