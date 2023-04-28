@@ -1,19 +1,18 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LayoutModule } from './layout/layout.module';
+import { NgDompurifySanitizer } from '@tinkoff/ng-dompurify';
 import {
-  TuiAlertModule,
-  TuiDialogModule,
   TuiRootModule,
+  TuiDialogModule,
+  TuiAlertModule,
   TUI_SANITIZER
 } from '@taiga-ui/core';
-import { NgDompurifySanitizer } from '@tinkoff/ng-dompurify';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { UserPageModule } from './pages/user-page/user-page.module';
-
 import { StoreModule } from '@ngrx/store';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PostFeedComponent } from './shared/modules/post-feed/post-feed.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,7 +24,8 @@ import { PostFeedComponent } from './shared/modules/post-feed/post-feed.componen
     BrowserAnimationsModule,
     TuiRootModule,
     TuiDialogModule,
-    TuiAlertModule
+    TuiAlertModule,
+    LayoutModule
   ],
   providers: [{ provide: TUI_SANITIZER, useClass: NgDompurifySanitizer }],
   bootstrap: [AppComponent]

@@ -1,8 +1,8 @@
-"""comment
+"""nevers
 
-Revision ID: f2f4471a0b87
-Revises: 
-Create Date: 2023-03-26 19:44:11.622531
+Revision ID: e73c9f78c611
+Revises: 3ffbc05d205d
+Create Date: 2023-04-27 12:44:30.441063
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f2f4471a0b87'
-down_revision = None
+revision = "e73c9f78c611"
+down_revision = "3ffbc05d205d"
 branch_labels = None
 depends_on = None
 

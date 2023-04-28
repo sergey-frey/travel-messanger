@@ -25,7 +25,7 @@ install: ## Installations
 
 .PHONY: run-backend
 run-backend: ## Run backend
-	poetry run uvicorn run:app
+	poetry run uvicorn run:app --reload
 
 .PHONY: migrate-init
 migrate-init: ## Initial migrations

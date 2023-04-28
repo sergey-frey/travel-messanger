@@ -1,4 +1,10 @@
-from backend.db.models import User, Message, Chat, user_chat
+from backend.db.models import (
+    User,
+    GroupMessage,
+    PersonalMessage,
+    PersonalChat,
+    GroupChat,
+)
 import asyncio
 import sys
 from logging.config import fileConfig
@@ -50,7 +56,7 @@ def run_migrations_offline():
         compare_type=True,
         literal_binds=True,
         target_metadata=target_metadata,
-        dialect_opts={'paramstyle': 'named'},
+        dialect_opts={"paramstyle": "named"},
     )
 
     with context.begin_transaction():
@@ -78,11 +84,11 @@ async def run_migrations_online():
     configuration = config.get_section(
         config.config_ini_section,
     )
-    configuration['sqlalchemy.url'] = get_url()
+    configuration["sqlalchemy.url"] = get_url()
     connectable = AsyncEngine(
         engine_from_config(
             configuration,
-            prefix='sqlalchemy.',
+            prefix="sqlalchemy.",
             poolclass=pool.NullPool,
             future=True,
         ),

@@ -1,8 +1,8 @@
 """nevers
 
-Revision ID: df104bc91387
-Revises: 6fb436ae8cb7
-Create Date: 2023-03-28 11:52:37.954756
+Revision ID: d33c88e7dfaf
+Revises: 5b0b21c062b2
+Create Date: 2023-04-27 12:48:33.223982
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'df104bc91387'
-down_revision = '6fb436ae8cb7'
+revision = "d33c88e7dfaf"
+down_revision = "5b0b21c062b2"
 branch_labels = None
 depends_on = None
 
