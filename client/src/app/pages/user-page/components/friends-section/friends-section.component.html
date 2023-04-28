@@ -1,16 +1,34 @@
 <app-user-page-section>
-  <h3
-    s-title
-    class="tui-text_h5"
-  >
-    Друзья
-  </h3>
   <section s-content>
-    <div class="friends-list">
-      <app-friend-item></app-friend-item>
-      <app-friend-item></app-friend-item>
-      <app-friend-item></app-friend-item>
-      <app-friend-item></app-friend-item>
-    </div>
+    <section
+      *ngIf="onlineFriendsCount"
+      class="online-friends"
+    >
+      <div class="title">
+        <h3 class="tui-text_h7">Друзья онлайн</h3>
+        <span class="friends-count">{{ onlineFriendsCount }}</span>
+      </div>
+      <div class="friends-list">
+        <app-friend-item
+          *ngFor="let friend of firstOnlineFriends"
+        ></app-friend-item>
+      </div>
+    </section>
+    <hr
+      *ngIf="onlineFriendsCount"
+      class="line"
+    />
+    <section class="friends">
+      <div
+        [ngClass]="{ title: true, 'only-friends-title': !onlineFriendsCount }"
+      >
+        <h3 class="tui-text_h7">Друзья</h3>
+        <span class="friends-count">{{ friendsCount }}</span>
+      </div>
+      <div class="friends-list">
+        <app-friend-item *ngFor="let friend of firstFriends" class="friend"></app-friend-item>
+        <span *ngIf="!friendsCount">У Вас пока нет друзей</span>
+      </div>
+    </section>
   </section>
 </app-user-page-section>
