@@ -1,18 +1,24 @@
 import asyncio
 from uuid import UUID
-from typing import List
+from typing import Dict, List
 from sqlalchemy import UUID
 from backend.app.room import Room, log
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import WebSocket, WebSocketDisconnect
+from backend.app.direct import Direct
 
 from backend.crud.chat import (
-    ban,
     group_log_message,
-    kick,
     personal_log_message,
     _add_user_to_chat,
+    _kick_user,
 )
+
+
+# TODO: Replace this other segment of code
+# await _add_user_to_chat(
+#     chat_id, session, sender_id="ecc966ab-1fea-4a8f-9da2-3524e2f6d55f"
+# )
 
 
 class ConnectionManager:
@@ -36,31 +42,31 @@ class ConnectionManager:
         Retrieve or create the user object
         Add the user to the room
         """
-        # await _add_user_to_chat(
-        #     chat_id, session, sender_id="ecc966ab-1fea-4a8f-9da2-3524e2f6d55f"
-        # )
         await self.room.broadcast_user_joined(sender_id)
         self.room.add_user(sender_id, websocket)
 
         try:
             while True:
                 msg = await websocket.receive_text()
-                if "/ban" in msg:
-                    await ban(
-                        session,
-                        chat_id,
-                        sender_id="ecc966ab-1fea-4a8f-9da2-3524e2f6d55f",
-                    )
-                    # await self.room.banned_user(sender_id)
                 if "/kick" in msg:
-                    await kick(
-                        session,
+                    # await self.room.kick_user(sender_id)
+                    sender_id = "ecc966ab-1fea-4a8f-9da2-3524e2f6d55f"
+                    await _kick_user(
                         chat_id,
+                        sender_id,
+                        session,
+                    )
+
+                if "/ban" in msg:
+                    # await self.room.banned_user(sender_id)
+                    pass
+                elif receiver_id is not None:
+                    await personal_log_message(
+                        session,
+                        receiver_id,
+                        msg,
                         sender_id="ecc966ab-1fea-4a8f-9da2-3524e2f6d55f",
                     )
-                    # await self.room.banned_user(sender_id)
-                elif receiver_id is not None:
-                    await personal_log_message(session, receiver_id, msg, sender_id)
                     await self.send_personal_message(msg, self.room._users[receiver_id])
                 else:
                     await group_log_message(
@@ -89,3 +95,47 @@ class ConnectionManager:
     async def broadcast(self, message: str, sender_ids: List[UUID]):
         for connection in self.active_connections:
             await connection.send_json({"message": message, "sender_ids": sender_ids})
+
+
+class PersonalConnectionManager:
+    def __init__(self, personal_room: Direct):
+        self.room = personal_room
+        self.active_connections: Dict[UUID, WebSocket] = {}
+
+    async def connect(
+        self,
+        receiver_id: UUID,
+        sender_id: UUID,
+        websocket: WebSocket,
+        session: AsyncSession,
+    ):
+        await websocket.accept()
+        self.active_connections[sender_id] = websocket
+
+        # Add the sender to the room
+        self.room.add_user(sender_id)
+
+        # Send a "user joined" message to the receiver
+        receiver_ws = self.active_connections.get(receiver_id)
+        if receiver_ws:
+            await receiver_ws.send_json(
+                {"type": "PERSONAL_JOIN", "data": {"user_id": sender_id}}
+            )
+
+    async def send_personal_message(
+        self, message: str, sender_id: UUID, receiver_id: UUID
+    ):
+        # Send a personal message from the sender to the receiver
+        receiver_ws = self.active_connections.get(receiver_id)
+        if receiver_ws:
+            await receiver_ws.send_json(
+                {
+                    "type": "PERSONAL_MESSAGE",
+                    "data": {"message": message, "sender_id": sender_id},
+                }
+            )
+
+    def disconnect(self, user_id: UUID):
+        # Remove the user from the room and close their WebSocket connection
+        self.room.remove_user(user_id)
+        del self.active_connections[user_id]

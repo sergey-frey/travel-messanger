@@ -1,5 +1,5 @@
 from uuid import UUID
-from sqlalchemy import UUID, delete, select, update, and_
+from sqlalchemy import UUID, delete, insert, select, update, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from backend.dto.chat import ChatUpdate
@@ -48,29 +48,54 @@ async def personal_log_message(session, receiver_id, msg: str, sender_id):
     await session.refresh(log_entry)
 
 
-async def kick(user_id, chat_id, session):
-    stmt = delete(GroupChat).where(
-        and_(GroupChat.user_id == user_id, GroupChat.chat_id == chat_id)
+async def _if_user_is_banned(user_id, chat_id, session):
+    stmt = select(UserChatBans).where(
+        and_(UserChatBans.c.user_id == user_id, UserChatBans.c.chat_id == chat_id)
+    )
+    rows = await session.execute(stmt)
+    result = rows.fetchone()
+    return result
+
+
+async def _kick_user(chat_id, user_id, session):
+    stmt = delete(UserChatMember).where(
+        and_(UserChatMember.c.user_id == user_id, UserChatMember.c.chat_id == chat_id)
     )
     await session.execute(stmt)
     await session.commit()
     return {"message": f"User {user_id} was kicked."}
 
 
-async def ban(chat_id, session, user_id):
+async def _ban(chat_id, user_id, session: AsyncSession):
     # Check if the user is already banned
+    if _if_user_is_banned is None:
+        # Add a new ban record
+        await _kick_user(chat_id, user_id, session)
+        stmt = insert(UserChatBans).values(user_id=user_id, chat_id=chat_id)
+        await session.execute(stmt)
+        await session.commit()
+        return {"message": "забанен нахуй"}
+        # return {"message": f"User {user_id} was banned from chat {chat_id}."}
+    else:
+        return {"message": "пока живет"}
+        # return {"message": f"User {user_id} is already banned from chat {chat_id}."}
+
+
+async def _unban(chat_id, user_id, session: AsyncSession):
     stmt = select(UserChatBans).where(
         and_(UserChatBans.c.user_id == user_id, UserChatBans.c.chat_id == chat_id)
     )
-    if stmt is None:
-        # Add a new ban record
-        stmt = UserChatBans(user_id=user_id, chat_id=chat_id)
-        session.add(stmt)
+    rows = await session.execute(stmt)
+    result = rows.fetchone()
+    if result is None:
+        stmt = delete(UserChatBans).where(
+            UserChatBans.c.user_id == user_id, UserChatBans.c.chat_id == chat_id
+        )
+        await session.execute(stmt)
         await session.commit()
-        await session.refresh(stmt)
-        return {"message": f"User {user_id} was banned from chat {chat_id}."}
+        return {"message": "попросил o пощаде"}
     else:
-        return {"message": f"User {user_id} is already banned from chat {chat_id}."}
+        return {"message": "Хвалит небеса за то что уже разбанен"}
 
 
 async def _add_user_to_chat(chat_id, session, sender_id):
@@ -85,9 +110,18 @@ async def _add_user_to_chat(chat_id, session, sender_id):
     return stmt
 
 
-async def _create_chat(name, owner, session: AsyncSession):
+async def _create_group_chat(name, owner, session: AsyncSession):
     """Create a new chat instance"""
     query = GroupChat(name=name, owner=owner)
+    session.add(query)
+    await session.commit()
+    await session.refresh(query)
+    return query
+
+
+async def _create_personal_chat(sender_id, receiver_id, session: AsyncSession):
+    """Create a new personal chat"""
+    query = PersonalChat(sender_id=sender_id, receiver_id=receiver_id)
     session.add(query)
     await session.commit()
     await session.refresh(query)
