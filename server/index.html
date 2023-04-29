@@ -44,6 +44,7 @@
             <div class="col-md-3">
                 <h4>Connected Users</h4>
                 <ul id="users"></ul>
+                <!-- <button type="button" class="btn btn-danger" id="remove-user-button">Remove User</button> -->
             </div>
         </div>
     </div>
@@ -83,7 +84,7 @@
             const newMessage = $('<div class="alert thin-alert" role="alert"></div>');
             const userSays = $('<strong>' + userId + ':  </strong>');
             if (userId === myUserId) {
-                newMessage.addClass('alert-secondary');
+                newMessage.addClass('alert-dark');
             } else {
                 newMessage.addClass('alert-info');
             }
