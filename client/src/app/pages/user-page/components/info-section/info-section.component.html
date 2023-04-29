@@ -4,12 +4,12 @@
     class="info-section-content"
   >
     <div class="info">
-      <h2 class="tui-text_h3">Дима Щедрин</h2>
+      <h2 class="tui-text_h3">{{firstName}}{{lastName}}</h2>
       <div class="subinfo">
-        <app-online-badge [isOnline]="true"></app-online-badge>
+        <app-online-badge [isOnline]="isOnline"></app-online-badge>
         <span class="place tui-text_body-l">
           <tui-svg src="tuiIconMapPinLarge"></tui-svg>
-          Санкт-Петербург
+          {{city}}
         </span>
       </div>
     </div>

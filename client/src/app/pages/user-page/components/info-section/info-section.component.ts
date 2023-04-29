@@ -7,4 +7,8 @@ import { Component, Input } from '@angular/core';
 })
 export class InfoSectionComponent {
   @Input() public avatar!: string
+  @Input() public firstName!: string
+  @Input() public lastName!: string
+  @Input() public isOnline!: boolean
+  @Input() public city!: string
 }
