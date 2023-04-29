@@ -11,7 +11,7 @@ import { UserPageComponent } from './user-page.component';
 import { UserPageSectionComponent } from './components/user-page-section/user-page-section.component';
 import { OnlineBadgeComponent } from './components/online-badge/online-badge.component';
 import { FriendItemComponent } from './components/friend-item/friend-item.component';
-import { ImageItemComponent } from './components/image-item/image-item.component';
+import { PhotoItemComponent } from './components/photo-item/photo-item.component';
 import { PostFeedModule } from '@shared/modules/post-feed/post-feed.module';
 
 @NgModule({
@@ -24,7 +24,7 @@ import { PostFeedModule } from '@shared/modules/post-feed/post-feed.module';
     UserPageSectionComponent,
     OnlineBadgeComponent,
     FriendItemComponent,
-    ImageItemComponent
+    PhotoItemComponent
   ],
   imports: [
     CommonModule,
