@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-info-section',
@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./info-section.component.less']
 })
 export class InfoSectionComponent {
-
+  @Input() public avatar!: string
 }

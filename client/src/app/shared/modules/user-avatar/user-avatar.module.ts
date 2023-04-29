@@ -7,4 +7,5 @@ import { UserAvatarComponent } from './user-avatar.component';
   imports: [CommonModule],
   exports: [UserAvatarComponent]
 })
-export class UserAvatarModule {}
+export class UserAvatarModule {
+}
