@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./photo-item.component.less']
 })
 export class PhotoItemComponent {
-  @Input() src!: string
+  @Input() public src!: string
 }
