@@ -11,12 +11,12 @@
       Показать все
     </button>
   </header>
-  <section s-content>
-    <div class="photos-list">
-      <app-image-item></app-image-item>
-      <app-image-item></app-image-item>
-      <app-image-item></app-image-item>
-      <app-image-item></app-image-item>
+  <section s-content class="content">
+    <div class="photos-list" *ngIf="firstImages.length; else noPhotos">
+      <app-image-item *ngFor="let img of firstImages" [src]="img"></app-image-item>
     </div>
+    <ng-template #noPhotos>
+      <p class="tui-text_body-xl no-photos">У Вас пока нет фотографий</p>
+    </ng-template>
   </section>
 </app-user-page-section>

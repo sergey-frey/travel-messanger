@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./user-page.component.less']
 })
 export class UserPageComponent {
-
+  images: string[] = new Array(20).fill('../../../assets/images/img-example.png')
 }

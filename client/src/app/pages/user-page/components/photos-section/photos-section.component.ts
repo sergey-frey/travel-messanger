@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-photos-section',
@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./photos-section.component.less']
 })
 export class PhotosSectionComponent {
-
+  @Input() images!: string[]
+  firstImages: string[] = []
+  ngOnInit() {
+    this.firstImages = this.images.slice(0, 4)
+  }
 }
