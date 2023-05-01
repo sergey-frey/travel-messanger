@@ -1,3 +1,4 @@
+import secrets
 from uuid import UUID
 from sqlalchemy import UUID, delete, insert, select, update, and_
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,21 +12,6 @@ from backend.db.models import (
     UserChatBans,
     UserChatMember,
 )
-
-
-# async def chat_info_vars(username: str = None, room: str = None):
-#     """
-#     URL parameter info needed for a user to participate in a chat
-#     :param username:
-#     :type username:
-#     :param room:
-#     :type room:
-#     """
-#     if username is None and room is None:
-#         return {"username": str(uuid4()), "room": 'chat:1'}
-#     return {"username": username, "room": room}
-
-# Define the log function
 
 
 async def group_log_message(session, chat_id, msg: str, sender_id):
@@ -82,12 +68,7 @@ async def _ban(chat_id, user_id, session: AsyncSession):
 
 
 async def _unban(chat_id, user_id, session: AsyncSession):
-    stmt = select(UserChatBans).where(
-        and_(UserChatBans.c.user_id == user_id, UserChatBans.c.chat_id == chat_id)
-    )
-    rows = await session.execute(stmt)
-    result = rows.fetchone()
-    if result is None:
+    if _if_user_is_banned:
         stmt = delete(UserChatBans).where(
             UserChatBans.c.user_id == user_id, UserChatBans.c.chat_id == chat_id
         )
@@ -112,7 +93,9 @@ async def _add_user_to_chat(chat_id, session, sender_id):
 
 async def _create_group_chat(name, owner, session: AsyncSession):
     """Create a new chat instance"""
-    query = GroupChat(name=name, owner=owner)
+    token = secrets.token_urlsafe(16)
+    invite_link = f"http://travel.com/invite/{token}"
+    query = GroupChat(name=name, owner=owner, invite_link=invite_link)
     session.add(query)
     await session.commit()
     await session.refresh(query)

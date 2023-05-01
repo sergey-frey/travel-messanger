@@ -191,7 +191,7 @@
                 userData.users.forEach(addToUsersList);
                 $(function () {
                     let myUserId = null;
-                    websocket = new WebSocket('ws://127.0.0.1:8000/api/v1/chat/ws');
+                    websocket = new WebSocket('ws://127.0.0.1:8000/api/v1/travel/ws');
                     websocket.onopen = onWebsocketOpen(websocket);
                     websocket.onerror = onWebsocketError;
                     websocket.onclose = onWebsocketClose;

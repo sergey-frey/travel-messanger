@@ -50,7 +50,7 @@ class ConnectionManager:
                 msg = await websocket.receive_text()
                 if "/kick" in msg:
                     # await self.room.kick_user(sender_id)
-                    sender_id = "ecc966ab-1fea-4a8f-9da2-3524e2f6d55f"
+                    # sender_id = "ecc966ab-1fea-4a8f-9da2-3524e2f6d55f"
                     await _kick_user(
                         chat_id,
                         sender_id,

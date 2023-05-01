@@ -14,16 +14,19 @@ from backend.dto.chat import UserListResponse
 router = APIRouter()
 
 
-# @router.get("/", description="Endpoint for get user data", response_model=UserRead)
-# async def get_user_by_uuid(user_id: UUID, db: AsyncSession = Depends(get_session)) -> UserRead:
-#     """
-#     Authenticates a user and returns an access token.
-#     """
-#     try:
-#         return await crud.get_user(user_id, db)
-#     except HTTPException as exception:
-#         raise HTTPException(
-#             status_code=503, detail=f"Database error: {exception}")
+@router.get(
+    "/by_uuid", description="Endpoint for get user data", response_model=UserRead
+)
+async def get_user_by_uuid(
+    user_id: UUID, db: AsyncSession = Depends(get_session)
+) -> UserRead:
+    """
+    Authenticates a user and returns an access token.
+    """
+    try:
+        return await crud.get_user(user_id, db)
+    except HTTPException as exception:
+        raise HTTPException(status_code=503, detail=f"Database error: {exception}")
 
 
 @router.get("/", response_model=UserListResponse)

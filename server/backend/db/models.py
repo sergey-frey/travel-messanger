@@ -99,9 +99,10 @@ class PersonalChat(Base):
 class GroupChat(Base):
     __tablename__ = "group_chats"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    name = Column(String)
+    name = Column(String, nullable=False, unique=False)
     owner = Column(ForeignKey("user.id"), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+    invite_link = Column(String, nullable=True, unique=True)
     messages = relationship("GroupMessage", backref="chat")
     members = relationship("User", secondary="user_chat_members")
 
@@ -120,7 +121,7 @@ class PersonalMessage(Base):
 class GroupMessage(Base):
     __tablename__ = "group_messages"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    text = Column(String)
+    text = Column(String, nullable=True, unique=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     chat_id = Column(UUID, ForeignKey("group_chats.id"), nullable=True)
     sender_id = Column(UUID, ForeignKey("user.id"))
