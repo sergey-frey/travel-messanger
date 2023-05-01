@@ -1,0 +1,22 @@
+@import "../../../node_modules/@taiga-ui/core/styles/mixins/mixins.less";
+
+.header {
+  padding: 12px 30px;
+  display: flex;
+  justify-content: center;
+  .shadow(4);
+
+  &__content {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__left-side,
+  &__right-side {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+}
