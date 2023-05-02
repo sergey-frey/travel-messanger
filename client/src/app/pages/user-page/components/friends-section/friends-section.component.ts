@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Friend } from '@customTypes/models/friendModel';
+import { Friend } from '../../../../types/models/friendModel';
 
 @Component({
   selector: 'app-friends-section',
