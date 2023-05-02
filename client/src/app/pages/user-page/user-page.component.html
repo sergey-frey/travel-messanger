@@ -12,6 +12,12 @@
     class="photos"
     [images]="images"
   ></app-photos-section>
-  <app-friends-section class="friends"></app-friends-section>
+  <app-friends-section
+    class="friends"
+    [friendsCount]="friendsCount"
+    [onlineFriendsCount]="onlineFriendsCount"
+    [firstFriends]="firstFriends"
+    [firstOnlineFriends]="firstOnlineFriends"
+  ></app-friends-section>
   <app-post-feed class="post-feed"></app-post-feed>
 </div>
