@@ -1,6 +1,6 @@
 from backend.app.users import auth_backend, fastapi_users
 from backend.dto.user import UserCreate, UserRead, UserUpdate
-from . import chat, user, post
+from . import chat, user, post, ws_chat
 from fastapi import APIRouter
 
 
@@ -12,14 +12,14 @@ router.include_router(
     tags=["chat"],
 )
 router.include_router(
+    ws_chat.router,
+    prefix="/travel",
+    tags=["ws_chat"],
+)
+router.include_router(
     post.router,
     prefix="/post",
     tags=["post"],
-)
-router.include_router(
-    chat.router,
-    prefix="/chat",
-    tags=["chat"],
 )
 router.include_router(
     user.router,
