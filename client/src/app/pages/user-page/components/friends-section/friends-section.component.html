@@ -22,12 +22,12 @@
     />
     <section class="friends">
       <div
-        [ngClass]="{ title: true, 'only-friends-title': !onlineFriendsCount}"
+        [ngClass]="{ title: true, 'only-friends-title': !onlineFriendsCount }"
       >
         <h3 class="tui-text_h7">Друзья</h3>
         <span class="friends-count">{{ friendsCount }}</span>
       </div>
-      <div [ngClass]="{'friends-list': true, 'no-friends': !friendsCount }">
+      <div [ngClass]="{ 'friends-list': true, 'no-friends': !friendsCount }">
         <app-friend-item
           *ngFor="let friend of firstFriends"
           [src]="friend.img"
