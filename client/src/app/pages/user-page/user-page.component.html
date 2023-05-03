@@ -19,6 +19,17 @@
     [firstFriends]="firstFriends"
     [firstOnlineFriends]="firstOnlineFriends"
   ></app-friends-section>
-  <app-gifts-section class="gifts" [giftsCount]="giftsCount" [firstGifts]="firstGifts"></app-gifts-section>
   <app-post-feed class="post-feed"></app-post-feed>
+  <div class="wrapper">
+    <app-gifts-section
+      class="gifts"
+      [giftsCount]="giftsCount"
+      [firstGifts]="firstGifts"
+    ></app-gifts-section>
+    <app-groups-section
+      class="groups"
+      [firstGroups]="firstGroups"
+      [groupsCount]="groupsCount"
+    ></app-groups-section>
+  </div>
 </div>

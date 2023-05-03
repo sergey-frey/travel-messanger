@@ -14,6 +14,8 @@ import { FriendItemComponent } from './components/friend-item/friend-item.compon
 import { PhotoItemComponent } from './components/photo-item/photo-item.component';
 import { PostFeedModule } from '@shared/modules/post-feed/post-feed.module';
 import { GiftsSectionComponent } from './components/gifts-section/gifts-section.component';
+import { GroupsSectionComponent } from './components/groups-section/groups-section.component';
+import { GroupItemComponent } from './components/group-item/group-item.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { GiftsSectionComponent } from './components/gifts-section/gifts-section.
     OnlineBadgeComponent,
     FriendItemComponent,
     PhotoItemComponent,
-    GiftsSectionComponent
+    GiftsSectionComponent,
+    GroupsSectionComponent,
+    GroupItemComponent
   ],
   imports: [
     CommonModule,

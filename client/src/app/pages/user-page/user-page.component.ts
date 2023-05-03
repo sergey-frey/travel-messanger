@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Friend } from '../../types/models/friendModel'
 import { NumberValueAccessor } from '@angular/forms';
+import { Group } from '../../types/models/groupModel';
 
 @Component({
   selector: 'app-user-page',
@@ -27,9 +28,13 @@ export class UserPageComponent {
   gifts: string[] = new Array(98).fill( '../../../assets/images/img-example.png')
   giftsCount!: number
   firstGifts!: string[]
+
+  groups: Group[] = new Array(87).fill({name: 'Web Development', img: '../../../assets/images/img-example.png'})
+  groupsCount!: number
+  firstGroups!: Group[]
   constructor() {
     this.firstImages = this.images.slice(0, 3)
-    
+
     this.friendsCount = this.friends.length
     this.onlineFriendsCount = this.onlineFriends.length
     this.firstFriends = this.friends.slice(0, 8)
@@ -37,5 +42,8 @@ export class UserPageComponent {
 
     this.giftsCount = this.gifts.length
     this.firstGifts = this.gifts.slice(0, 4)
+
+    this.groupsCount = this.groups.length
+    this.firstGroups = this.groups.slice(0, 4)
   }
 }

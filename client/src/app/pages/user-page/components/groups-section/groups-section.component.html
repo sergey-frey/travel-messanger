@@ -1,0 +1,11 @@
+<app-user-page-section>
+  <section s-content>
+    <div class="title">
+      <h3 class="tui-text_h7">Группы</h3>
+      <span class="groups-count">{{groupsCount}}</span>
+    </div>
+    <div class="groups-list">
+      <app-group-item *ngFor="let group of firstGroups" [src]="group.img" [name]="group.name"></app-group-item>
+    </div>
+  </section>
+</app-user-page-section>
