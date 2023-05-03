@@ -6,9 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./photos-section.component.less']
 })
 export class PhotosSectionComponent {
-  @Input() public images!: string[]
-  firstImages: string[] = []
-  ngOnInit() {
-    this.firstImages = this.images.slice(0, 4)
-  }
+  @Input() public firstImages!: string[]
 }
