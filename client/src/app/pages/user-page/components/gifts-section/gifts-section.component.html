@@ -1,0 +1,11 @@
+<app-user-page-section>
+  <section s-content>
+    <div class="title">
+      <h3 class="tui-text_h7">Подарки</h3>
+      <span class="gifts-count">{{giftsCount}}</span>
+    </div>
+    <div class="gifts">
+      <img *ngFor="let gift of firstGifts" class="gift" [src]="gift" alt="gift">
+    </div>
+  </section>
+</app-user-page-section>
