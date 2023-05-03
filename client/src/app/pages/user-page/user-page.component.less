@@ -1,13 +1,13 @@
 .user-page__container {
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-template-rows: 240px 240px auto;
   gap: 15px;
   grid-template-areas:
-  "actions info info info info"
-  "photos photos photos photos friends"
-  "post-feed post-feed . . .";
+  "actions info  info info"
+  "photos photos photos friends"
+  "post-feed post-feed post-feed gifts";
 }
 .actions {
   grid-area: actions;
@@ -20,6 +20,10 @@
 }
 .friends {
   grid-area: friends;
+}
+.gifts {
+  grid-area: gifts;
+  height: fit-content;
 }
 .post-feed {
   grid-area: post-feed;
