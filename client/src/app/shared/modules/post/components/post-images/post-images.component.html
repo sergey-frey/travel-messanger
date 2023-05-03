@@ -11,7 +11,7 @@
       ></tui-svg>
     </button>
     <tui-carousel [(index)]="index">
-      <ng-container *ngFor="let src of imageSources; first as isFirst">
+      <ng-container *ngFor="let src of photos; first as isFirst">
         <div
           class="image-wrapper"
           *tuiItem
@@ -40,7 +40,7 @@
   <tui-pagination
     size="s"
     class="pagination"
-    [length]="imageSources.length"
+    [length]="photos.length"
     [(index)]="index"
   ></tui-pagination>
 </div>

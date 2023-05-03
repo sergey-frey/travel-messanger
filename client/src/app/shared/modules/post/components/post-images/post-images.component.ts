@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-post-images',
@@ -6,18 +6,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./post-images.component.less']
 })
 export class PostImagesComponent {
-  imageSources: string[] = [
-    'https://fakeimg.pl/300x400/?text=Hello',
-    'https://fakeimg.pl/800x300/?text=Bay'
-  ];
+  @Input() public photos!: string[]
   index = 0;
 
   public prevImage() {
     this.index =
-      (this.index + this.imageSources.length - 1) % this.imageSources.length;
+      (this.index + this.photos.length - 1) % this.photos.length;
   }
 
   public nextImage() {
-    this.index = (this.index + 1) % this.imageSources.length;
+    this.index = (this.index + 1) % this.photos.length;
   }
 }

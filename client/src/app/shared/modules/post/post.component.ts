@@ -7,5 +7,6 @@ import { IPost } from '@customTypes/models';
   styleUrls: ['./post.component.less']
 })
 export class PostComponent {
-  @Input() public post!: IPost;
+  @Input() public post!: IPost
 }
+

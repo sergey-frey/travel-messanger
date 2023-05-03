@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Friend } from '../../../../types/models/friendModel';
+import { IFriend } from '@customTypes/models';
 
 @Component({
   selector: 'app-friends-section',
@@ -9,8 +9,8 @@ import { Friend } from '../../../../types/models/friendModel';
 export class FriendsSectionComponent {
   @Input() public friendsCount!: number
   @Input() public onlineFriendsCount!: number
-  @Input() public firstFriends!: Friend[]
-  @Input() public firstOnlineFriends!: Friend[]
+  @Input() public firstFriends!: IFriend[]
+  @Input() public firstOnlineFriends!: IFriend[]
   constructor() {
 
   }

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Group } from '../../../../types/models/groupModel';
+import { IGroup } from '@customTypes/models';
 
 @Component({
   selector: 'app-groups-section',
@@ -7,7 +7,7 @@ import { Group } from '../../../../types/models/groupModel';
   styleUrls: ['./groups-section.component.less']
 })
 export class GroupsSectionComponent {
-  @Input() public firstGroups!: Group[]
+  @Input() public firstGroups!: IGroup[]
   @Input() public groupsCount!: number
 
 }
