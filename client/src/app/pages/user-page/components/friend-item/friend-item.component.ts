@@ -6,6 +6,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./friend-item.component.less']
 })
 export class FriendItemComponent {
-  @Input() src!: string
-  @Input() name!: string
+  @Input() public src!: string
+  @Input() public name!: string
 }

@@ -7,10 +7,10 @@ import { Friend } from '../../../../types/models/friendModel';
   styleUrls: ['./friends-section.component.less']
 })
 export class FriendsSectionComponent {
-  @Input() friendsCount!: number
-  @Input() onlineFriendsCount!: number
-  @Input() firstFriends!: Friend[]
-  @Input() firstOnlineFriends!: Friend[]
+  @Input() public friendsCount!: number
+  @Input() public onlineFriendsCount!: number
+  @Input() public firstFriends!: Friend[]
+  @Input() public firstOnlineFriends!: Friend[]
   constructor() {
 
   }
