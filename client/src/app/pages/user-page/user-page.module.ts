@@ -13,6 +13,7 @@ import { OnlineBadgeComponent } from './components/online-badge/online-badge.com
 import { FriendItemComponent } from './components/friend-item/friend-item.component';
 import { PhotoItemComponent } from './components/photo-item/photo-item.component';
 import { PostFeedModule } from '@shared/modules/post-feed/post-feed.module';
+import { GiftsSectionComponent } from './components/gifts-section/gifts-section.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { PostFeedModule } from '@shared/modules/post-feed/post-feed.module';
     UserPageSectionComponent,
     OnlineBadgeComponent,
     FriendItemComponent,
-    PhotoItemComponent
+    PhotoItemComponent,
+    GiftsSectionComponent
   ],
   imports: [
     CommonModule,

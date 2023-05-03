@@ -10,7 +10,7 @@
   ></app-info-section>
   <app-photos-section
     class="photos"
-    [images]="images"
+    [firstImages]="firstImages"
   ></app-photos-section>
   <app-friends-section
     class="friends"
@@ -19,5 +19,6 @@
     [firstFriends]="firstFriends"
     [firstOnlineFriends]="firstOnlineFriends"
   ></app-friends-section>
+  <app-gifts-section class="gifts" [giftsCount]="giftsCount" [firstGifts]="firstGifts"></app-gifts-section>
   <app-post-feed class="post-feed"></app-post-feed>
 </div>
