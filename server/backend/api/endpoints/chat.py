@@ -1,3 +1,4 @@
+from typing import Dict, List
 import uuid
 from uuid import UUID
 from backend.crud.chat import (
@@ -12,7 +13,7 @@ from backend.crud.chat import (
     _add_user_to_chat,
 )
 
-from backend.dto.chat import ChatUpdate
+from backend.dto.chat import GroupChatUpdate, GroupChat
 from backend.db.database import get_session
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.app.users import current_active_user
@@ -33,17 +34,20 @@ router = APIRouter()
 
 
 @router.get("/")
-async def get_all_chats(session: AsyncSession = Depends(get_session)):
+async def get_all_chats(
+    user_id: UUID = Depends(current_active_user),
+    session: AsyncSession = Depends(get_session),
+) -> List[UUID]:
     try:
-        return await _get_chats(session)
+        return await _get_chats(user_id.id, session)
     except HTTPException as exception:
         raise HTTPException(status_code=503, detail=f"Database error: {exception}")
 
 
-@router.put("/")
+@router.put("/", response_model=GroupChat)
 async def update_chats(
-    chat_id: UUID, chat: ChatUpdate, session: AsyncSession = Depends(get_session)
-):
+    chat_id: UUID, chat: GroupChatUpdate, session: AsyncSession = Depends(get_session)
+) -> GroupChatUpdate:
     try:
         return await _update_chat(chat_id, chat, session)
     except HTTPException as exception:

@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 from uuid import UUID
 from datetime import datetime
 from pydantic import BaseModel
@@ -18,30 +18,29 @@ class UserListResponse(BaseModel):
     users: List[UUID]
 
 
-class ChatBase(BaseModel):
+class GroupChatBase(BaseModel):
     id: UUID  # Added id field to the Chat model.
-    title: str
-    content: str
-    owner_id: UUID
+    name: str
+    owner: UUID
+    avatar: Optional[str]
     created_at: datetime  # Added created_at field to the Chat model.
-    # comments: List[Comment] = []  # Added comments field to the Chat model.
 
 
-class ChatCreate(BaseModel):
-    title: str
-    content: str
-
-
-class ChatUpdate(BaseModel):
+class GroupChatCreate(BaseModel):
     name: str
     avatar: Optional[str]
 
 
-class ChatDelete(BaseModel):
+class GroupChatUpdate(BaseModel):
+    name: str
+    avatar: Optional[str]
+
+
+class GroupChatDelete(BaseModel):
     pass
 
 
-class Chat(ChatBase):
+class GroupChat(GroupChatBase):
     pass
 
     class Config:
