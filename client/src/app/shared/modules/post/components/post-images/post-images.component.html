@@ -11,9 +11,10 @@
       ></tui-svg>
     </button>
     <tui-carousel [(index)]="index">
-      <ng-container *ngFor="let src of photos; first as isFirst">
+      <ng-container *ngFor="let src of photos; first as isFirst; index as i">
         <div
           class="image-wrapper"
+          style="background-image: url({{photos[i]}});"
           *tuiItem
         >
           <div class="blur">

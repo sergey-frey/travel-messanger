@@ -57,7 +57,8 @@ export class UserPageComponent {
     authorImg: '../../../assets/images/img-example.png',
     authorFName: 'Серёжа',
     authorLName: 'Тенькаев',
-    photos: new Array(4).fill('https://fakeimg.pl/350x420/?text=Hello'),
+    // photos: new Array(4).fill('https://fakeimg.pl/350x420/?text=Hello'),
+    photos:[ 'https://fakeimg.pl/350x420/?text=Hello', '../../../assets/images/img-example.png', 'https://fakeimg.pl/350x420/?text=Hello'],
     text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat mollitia possimus laborum ex non eaque corporis tempora recusandae ipsa voluptatem modi iure totam at nostrum quidem, odio assumenda doloribus illum. Voluptate veniam recusandae cupiditate nam debitis soluta pariatur eligendi quos animi obcaecati at voluptatibus illo, suscipit sapiente laudantium cumque dolorum!',
     date: moment()
       .set({ month: 4, date: 3, hours: 16, minutes: 38, seconds: 0 })
