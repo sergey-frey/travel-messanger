@@ -1,9 +1,9 @@
 import secrets
 from uuid import UUID
-from sqlalchemy import UUID, delete, insert, select, update, and_
+from sqlalchemy import UUID, delete, insert, or_, select, update, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-from backend.dto.chat import ChatUpdate
+from backend.dto.chat import GroupChatUpdate
 from backend.db.models import (
     GroupChat,
     GroupMessage,
@@ -111,14 +111,15 @@ async def _create_personal_chat(sender_id, receiver_id, session: AsyncSession):
     return query
 
 
-async def _get_chats(session):
+async def _get_chats(user_id: UUID, session):
     """Query all chats with their associated messages and users"""
-    stmt_personal_chat = select(PersonalChat).options(
-        selectinload(PersonalChat.sender), selectinload(PersonalChat.receiver)
+    stmt_personal_chat = select(PersonalChat.sender_id, PersonalChat.receiver_id).where(
+        or_(PersonalChat.sender_id == user_id, PersonalChat.receiver_id == user_id)
     )
-    stmt_group_chat = select(GroupChat).options(
-        selectinload(GroupChat.messages).selectinload(GroupMessage.user)
+    stmt_group_chat = select(UserChatMember).where(
+        or_(UserChatMember.c.user_id == user_id, GroupChat.owner == user_id)
     )
+
     stmt = stmt_personal_chat.union_all(stmt_group_chat)
     result = await session.execute(stmt)
     return result.scalars().all()
@@ -131,7 +132,7 @@ async def _get_chat(chat_id, session):
     return result.scalars().first()
 
 
-async def _update_chat(chat_id: UUID, chat: ChatUpdate, session: AsyncSession):
+async def _update_chat(chat_id: UUID, chat: GroupChatUpdate, session: AsyncSession):
     query = (
         update(GroupChat)
         .where(GroupChat.id == chat_id)

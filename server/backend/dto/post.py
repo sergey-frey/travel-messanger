@@ -10,27 +10,48 @@ class PostBase(ContentBase):
     id: UUID  # Added id field to the Post model.
     title: str
     content: str
-    owner_id: UUID
     created_at: datetime  # Added created_at field to the Post model.
-    # comments: List[Comment] = []  # Added comments field to the Post model.
 
 
-class PostCreate(BaseModel):
+class UserPostCreate(BaseModel):
     title: str
     content: str
 
 
-class PostUpdate(BaseModel):
+class UserPostUpdate(BaseModel):
     title: str
     content: str
 
 
-class PostDelete(BaseModel):
+class UserPostDelete(BaseModel):
     pass
 
 
-class Post(PostBase):
+class UserPost(PostBase):
+    post_id: UUID
+    user_id: UUID
+
+    class Config:
+        orm_mode = True
+
+
+class CommunityPostCreate(BaseModel):
+    title: str
+    content: str
+
+
+class CommunityPostUpdate(BaseModel):
+    title: str
+    content: str
+
+
+class CommunityPostDelete(BaseModel):
     pass
+
+
+class CommunityPost(PostBase):
+    post_id: UUID
+    community_id: UUID
 
     class Config:
         orm_mode = True

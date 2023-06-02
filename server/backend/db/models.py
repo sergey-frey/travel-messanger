@@ -41,19 +41,12 @@ user_chat_bans = Table(
     Column("user_id", UUID, ForeignKey("user.id")),
     Column("chat_id", UUID, ForeignKey("group_chats.id")),
 )
-
-user_post = Table(
-    "user_post",
-    Base.metadata,
-    Column("user_id", UUID, ForeignKey("user.id")),
-    Column("post_id", UUID, ForeignKey("posts.id")),
-)
-user_community = Table(
-    "user_community",
-    Base.metadata,
-    Column("user_id", UUID, ForeignKey("user.id")),
-    Column("community_id", UUID, ForeignKey("communities.id")),
-)
+# subs_community = Table(
+#     "subs_community",
+#     Base.metadata,
+#     Column("user_id", UUID, ForeignKey("user.id")),
+#     Column("community_id", UUID, ForeignKey("communities.id")),
+# )
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
@@ -78,7 +71,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     group_chats = relationship(
         "GroupChat", foreign_keys="[GroupChat.owner]", backref="users"
     )
-    posts = relationship("Post", secondary="user_post", backref="user")
+    posts = relationship("UserPost", secondary="user_posts", backref="user")
     # photos = relationship("photos", backref="user", lazy="dynamic")
 
     is_active: bool = Column(Boolean, default=True, nullable=False)
@@ -134,8 +127,15 @@ class Community(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     title = Column(String(255))
     description = Column(Text)
+    open_community = Column(Boolean(), default=True, unique=False)
+    # subscribers = Column(ForeignKey("subs_community.user_id"),
+    #                      nullable=False, unique=False)
     owner = Column(ForeignKey("user.id"), nullable=False)
+    avatar = Column(String(255), unique=False, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+    verified = Column(Boolean, default=False)
+    posts = relationship("CommunityPost", back_populates="community")
+    # subs = relationship("User", secondary="subs_community")
 
 
 class Post(Base):
@@ -145,11 +145,23 @@ class Post(Base):
     likes = Column(Integer, default=0)
     dislikes = Column(Integer, default=0)
     content = Column(Text, index=True)
-    owner_id = Column(ForeignKey("user.id"), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     comments = relationship(
         "Comment", back_populates="post", cascade="all, delete-orphan"
     )
+
+
+class UserPost(Post):
+    __tablename__ = "user_posts"
+    post_id = Column(UUID(as_uuid=True), ForeignKey("posts.id"), primary_key=True)
+    owner_id = Column(ForeignKey("user.id"), nullable=False)
+
+
+class CommunityPost(Post):
+    __tablename__ = "community_posts"
+    post_id = Column(UUID(as_uuid=True), ForeignKey("posts.id"), primary_key=True)
+    community_id = Column(ForeignKey("communities.id"), nullable=False)
+    community = relationship("Community", back_populates="posts")
 
 
 class Comment(Base):

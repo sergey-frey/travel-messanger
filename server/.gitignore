@@ -75,4 +75,4 @@ dmypy.json
 
 # VS Code
 .vscode/
-/templates/
+index.js

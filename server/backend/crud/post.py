@@ -2,12 +2,12 @@ from fastapi import Depends, HTTPException
 from sqlalchemy import UUID, delete, insert, select, update
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.db.models import Post
-from backend.dto.post import PostUpdate
+
+from backend.db.models import CommunityPost, Post, UserPost
 
 
-async def _create_post(post, owner_id, session: AsyncSession):
-    query = Post(title=post.title, content=post.content, owner_id=owner_id)
+async def _create_post(post, session: AsyncSession):
+    query = Post(title=post.title, content=post.content)
     session.add(query)
     await session.commit()
     await session.refresh(query)
@@ -20,7 +20,7 @@ async def _read_posts(skip, limit, session: AsyncSession):
     return posts.scalars().all()
 
 
-async def _update_post(post_id: UUID, post: PostUpdate, session: AsyncSession):
+async def _update_post(post_id: UUID, post, session: AsyncSession):
     query = (
         update(Post)
         .where(Post.id == post_id)
@@ -42,3 +42,21 @@ async def _delete_post(post_id: UUID, session: AsyncSession):
     if post_to_delete:
         await session.commit()
         return {"message": "Post deleted"}
+
+
+async def user_create_post(owner_id: UUID, post_id: UUID, session: AsyncSession):
+    query = UserPost(owner_id=owner_id, post_id=post_id)
+    session.add(query)
+    await session.commit()
+    await session.refresh(query)
+    return query
+
+
+async def community_create_post(
+    community_id: UUID, post_id: UUID, session: AsyncSession
+):
+    query = CommunityPost(community_id=community_id, post_id=post_id)
+    session.add(query)
+    await session.commit()
+    await session.refresh(query)
+    return query
