@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./avatar.component.less']
 })
 export class AvatarComponent {
-  @Input() src: string = 'https://fakeimg.pl/100/?text=Avatar';
+  @Input() src: string = '../../../../assets/images/img-example.png';
 }

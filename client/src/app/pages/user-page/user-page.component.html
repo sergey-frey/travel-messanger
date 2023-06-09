@@ -1,0 +1,35 @@
+<div class="container user-page__container">
+  <app-actions-section class="actions"></app-actions-section>
+  <app-info-section
+    class="info"
+    [avatar]="avatar"
+    [lastName]="lastName"
+    [firstName]="firstName"
+    [isOnline]="isOnline"
+    [city]="city"
+  ></app-info-section>
+  <app-photos-section
+    class="photos"
+    [firstImages]="firstImages"
+  ></app-photos-section>
+  <app-friends-section
+    class="friends"
+    [friendsCount]="friendsCount"
+    [onlineFriendsCount]="onlineFriendsCount"
+    [firstFriends]="firstFriends"
+    [firstOnlineFriends]="firstOnlineFriends"
+  ></app-friends-section>
+  <app-post-feed class="post-feed" [posts]="posts"></app-post-feed>
+  <div class="wrapper">
+    <app-gifts-section
+      class="gifts"
+      [giftsCount]="giftsCount"
+      [firstGifts]="firstGifts"
+    ></app-gifts-section>
+    <app-groups-section
+      class="groups"
+      [firstGroups]="firstGroups"
+      [groupsCount]="groupsCount"
+    ></app-groups-section>
+  </div>
+</div>

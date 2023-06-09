@@ -1,15 +1,14 @@
 <header class="header">
-  <div class="header__content">
-    <section class="header__left-side">
-      <app-logo></app-logo>
-      <app-search-input></app-search-input>
-      <app-theme-toggle-button></app-theme-toggle-button>
-    </section>
-
-    <section class="header__right-side">
-      <app-notification-button></app-notification-button>
-      <app-avatar></app-avatar>
-    </section>
+    <div class="header__content">
+      <app-logo class="logo"></app-logo>
+      <div class="container header__container">
+        <app-search-input></app-search-input>
+        <app-theme-toggle-button></app-theme-toggle-button>
+      </div>
+      <div class="right-side">
+        <app-notification-button></app-notification-button>
+        <app-avatar></app-avatar>
+      </div>
   </div>
 </header>
 <ng-content></ng-content>

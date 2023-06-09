@@ -1,22 +1,35 @@
 @import "../../../node_modules/@taiga-ui/core/styles/mixins/mixins.less";
 
 .header {
-  padding: 12px 30px;
+  padding: 12px 0;
   display: flex;
   justify-content: center;
+  margin-bottom: 15px;
   .shadow(4);
-
-  &__content {
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  &__left-side,
-  &__right-side {
+  .header__container {
+    padding: 0;
+    width: 820px;
     display: flex;
     align-items: center;
+    justify-content: start;
     gap: 15px;
+  }
+  &__content {
+    width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    .logo {
+      position: absolute;
+      left: 0;
+    }
+    .right-side {
+      position: absolute;
+      right: 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
   }
 }

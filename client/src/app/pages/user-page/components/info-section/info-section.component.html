@@ -1,0 +1,20 @@
+<app-user-page-section>
+  <section
+    s-content
+    class="info-section-content"
+  >
+    <div class="info">
+      <h2 class="tui-text_h4">{{firstName}} {{lastName}}</h2>
+      <div class="subinfo">
+        <app-online-badge [isOnline]="isOnline"></app-online-badge>
+        <span class="place tui-text_body-l">
+          <tui-svg src="tuiIconMapPinLarge"></tui-svg>
+          {{city}}
+        </span>
+      </div>
+    </div>
+    <app-user-avatar
+      [src]="avatar"
+    ></app-user-avatar>
+  </section>
+</app-user-page-section>

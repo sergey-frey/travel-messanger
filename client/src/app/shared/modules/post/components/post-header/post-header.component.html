@@ -1,0 +1,19 @@
+<div class="post-header">
+  <div class="wrapper">
+    <img
+      [src]="authorImg"
+      class="profile-image"
+      alt="profile-image"
+    />
+    <div class="info">
+      <p class="tui-text_body-xl">{{ authorFName }} {{ authorLName }}</p>
+      <p class="info__time tui-text_body-s-2">{{getPostTimeInfo()}}</p>
+    </div>
+  </div>
+  <button
+    tuiIconButton
+    appearance="icon"
+    icon="tuiIconMoreHorizontalLarge"
+    class="btn"
+  ></button>
+</div>

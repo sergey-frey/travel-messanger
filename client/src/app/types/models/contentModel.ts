@@ -5,6 +5,6 @@ export interface Content {
 	id: string;
 	likes: number;
 	dislikes: number;
-	comments: IComment;
+	comments: IComment[];
 	reactions: Reaction[];
 }

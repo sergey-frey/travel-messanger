@@ -1,0 +1,47 @@
+<div class="post-images">
+  <div class="images">
+    <button
+      class="arrow-btn arrow-btn_left"
+      title="Предыдущее фото"
+      (click)="prevImage()"
+    >
+      <tui-svg
+        class="arrow-image"
+        src="tuiIconChevronLeftLarge"
+      ></tui-svg>
+    </button>
+    <tui-carousel [(index)]="index">
+      <ng-container *ngFor="let src of photos; first as isFirst; index as i">
+        <div
+          class="image-wrapper"
+          style="background-image: url({{photos[i]}});"
+          *tuiItem
+        >
+          <div class="blur">
+            <img
+              [src]="src"
+              class="image"
+              alt="image"
+            />
+          </div>
+        </div>
+      </ng-container>
+    </tui-carousel>
+    <button
+      class="arrow-btn arrow-btn_right"
+      title="Следующее фото"
+      (click)="nextImage()"
+    >
+      <tui-svg
+        class="arrow-image"
+        src="tuiIconChevronRightLarge"
+      ></tui-svg>
+    </button>
+  </div>
+  <tui-pagination
+    size="s"
+    class="pagination"
+    [length]="photos.length"
+    [(index)]="index"
+  ></tui-pagination>
+</div>

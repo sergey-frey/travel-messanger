@@ -1,0 +1,11 @@
+<article class="post">
+  <app-post-header
+    [authorImg]="post.authorImg"
+    [authorFName]="post.authorFName"
+    [authorLName]="post.authorLName"
+    [date]="post.date"
+  ></app-post-header>
+  <app-post-text [text]="post.text"></app-post-text>
+  <app-post-images [photos]="post.photos"></app-post-images>
+  <app-post-control-bar></app-post-control-bar>
+</article>
